@@ -16,6 +16,7 @@
 package com.github.bpark.companion;
 
 import io.vertx.core.Handler;
+import io.vertx.core.json.Json;
 import io.vertx.rxjava.core.AbstractVerticle;
 import io.vertx.rxjava.core.eventbus.EventBus;
 import io.vertx.rxjava.core.eventbus.Message;
@@ -58,7 +59,7 @@ public class ClassificationVerticle extends AbstractVerticle {
 
             logger.info("evaluated classification: {}", classification);
 
-            message.reply(classification);
+            message.reply(Json.encode(classification));
         });
     }
 
