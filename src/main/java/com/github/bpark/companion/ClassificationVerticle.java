@@ -15,14 +15,18 @@
  */
 package com.github.bpark.companion;
 
+import com.github.bpark.companion.input.AnalyzedText;
 import com.github.bpark.companion.model.ClassificationResult;
 import io.vertx.core.Handler;
 import io.vertx.core.json.Json;
 import io.vertx.rxjava.core.AbstractVerticle;
 import io.vertx.rxjava.core.eventbus.EventBus;
 import io.vertx.rxjava.core.eventbus.Message;
+import io.vertx.rxjava.core.eventbus.MessageConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rx.Observable;
+import rx.Single;
 import weka.classifiers.Classifier;
 import weka.classifiers.meta.FilteredClassifier;
 import weka.core.*;
@@ -32,12 +36,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ClassificationVerticle extends AbstractVerticle {
 
     private static final Logger logger = LoggerFactory.getLogger(ClassificationVerticle.class);
 
     private static final String ADDRESS = "classification.BASIC";
+
+    private static final String NLP_KEY = "nlp";
+    private static final String CLASSIFICATION_KEY = "classification";
 
     private static final String ATTR_CLASS = "class";
     private static final String ATTR_TEXT = "text";
@@ -48,6 +56,30 @@ public class ClassificationVerticle extends AbstractVerticle {
         Classifier classifier = loadClassifier();
 
         EventBus eventBus = vertx.eventBus();
+
+        MessageConsumer<String> consumer = eventBus.consumer(ADDRESS);
+        Observable<Message<String>> observable = consumer.toObservable();
+
+        observable.subscribe(message -> {
+            String id = message.body();
+
+            readMessage(id).flatMap(analyzedText -> {
+
+                List<Map<String, Double>> classifications = analyzedText.getSentences().stream().map(sentence -> {
+                    logger.info("received sentence: {}", sentence);
+
+                    Instances instances = buildInstances(sentence.getRaw());
+
+                    Map<String, Double> classification = classify(classifier, instances);
+
+                    logger.info("evaluated classification: {}", classification);
+
+                    return classification;
+                }).collect(Collectors.toList());
+
+                return Observable.just(classifications);
+            }).flatMap(classifications -> saveMessage(id, classifications)).subscribe(a -> message.reply(id));
+        });
 
         eventBus.consumer(ADDRESS, (Handler<Message<String>>) message -> {
             String sentence = message.body();
@@ -111,6 +143,19 @@ public class ClassificationVerticle extends AbstractVerticle {
         }
 
         return distributionMap;
+    }
+
+    private Observable<AnalyzedText> readMessage(String id) {
+        return vertx.sharedData().<String, String>rxGetClusterWideMap(id)
+                .flatMap(map -> map.rxGet(NLP_KEY))
+                .flatMap(content -> Single.just(Json.decodeValue(content, AnalyzedText.class)))
+                .toObservable();
+    }
+
+    private Observable<Void> saveMessage(String id, List<Map<String, Double>> analyses) {
+        return vertx.sharedData().<String, String>rxGetClusterWideMap(id)
+                .flatMap(map -> map.rxPut(CLASSIFICATION_KEY, Json.encode(analyses)))
+                .toObservable();
     }
 
 }
