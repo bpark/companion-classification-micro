@@ -16,8 +16,6 @@
 package com.github.bpark.companion;
 
 import com.github.bpark.companion.input.AnalyzedText;
-import com.github.bpark.companion.model.ClassificationResult;
-import io.vertx.core.Handler;
 import io.vertx.core.json.Json;
 import io.vertx.rxjava.core.AbstractVerticle;
 import io.vertx.rxjava.core.eventbus.EventBus;
@@ -29,7 +27,11 @@ import rx.Observable;
 import rx.Single;
 import weka.classifiers.Classifier;
 import weka.classifiers.meta.FilteredClassifier;
-import weka.core.*;
+import weka.core.Attribute;
+import weka.core.DenseInstance;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.SerializationHelper;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -53,8 +55,32 @@ public class ClassificationVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-        Classifier classifier = loadClassifier();
 
+        vertx.<Classifier>rxExecuteBlocking(future -> {
+
+            try {
+
+                Classifier classifier = loadClassifier();
+
+                future.complete(classifier);
+
+            } catch (Exception e) {
+                future.fail(e);
+            }
+
+        }).toObservable().subscribe(
+                this::registerAnalyzer,
+                error -> logger.error("faild to load classifier models!", error)
+        );
+
+    }
+
+    private FilteredClassifier loadClassifier() throws Exception {
+        InputStream inputStream = this.getClass().getResourceAsStream("/classifications/basic-dialogs.model");
+        return (FilteredClassifier) SerializationHelper.read(inputStream);
+    }
+
+    private void registerAnalyzer(Classifier classifier) {
         EventBus eventBus = vertx.eventBus();
 
         MessageConsumer<String> consumer = eventBus.consumer(ADDRESS);
@@ -80,25 +106,6 @@ public class ClassificationVerticle extends AbstractVerticle {
                 return Observable.just(classifications);
             }).flatMap(classifications -> saveMessage(id, classifications)).subscribe(a -> message.reply(id));
         });
-
-        eventBus.consumer(ADDRESS, (Handler<Message<String>>) message -> {
-            String sentence = message.body();
-
-            logger.info("received sentence: {}", sentence);
-
-            Instances instances = buildInstances(sentence);
-
-            Map<String, Double> classification = classify(classifier, instances);
-
-            logger.info("evaluated classification: {}", classification);
-
-            message.reply(Json.encode(new ClassificationResult(classification)));
-        });
-    }
-
-    private FilteredClassifier loadClassifier() throws Exception {
-        InputStream inputStream = this.getClass().getResourceAsStream("/classifications/basic-dialogs.model");
-        return (FilteredClassifier) SerializationHelper.read(inputStream);
     }
 
     private Instances buildInstances(String text) {
