@@ -1,16 +1,16 @@
 package com.github.bpark.companion.model;
 
-import java.util.Map;
+import java.util.List;
 
 public class ClassificationResult {
 
-    private Map<String, Double> classifications;
+    private List<PredictedSentence> senteces;
 
-    public ClassificationResult(Map<String, Double> classifications) {
-        this.classifications = classifications;
+    public ClassificationResult(List<PredictedSentence> senteces) {
+        this.senteces = senteces;
     }
 
-    public Map<String, Double> getClassifications() {
-        return classifications;
+    public List<PredictedSentence> getSenteces() {
+        return senteces;
     }
 }

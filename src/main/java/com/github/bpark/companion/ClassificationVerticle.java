@@ -16,6 +16,8 @@
 package com.github.bpark.companion;
 
 import com.github.bpark.companion.input.AnalyzedText;
+import com.github.bpark.companion.model.ClassificationResult;
+import com.github.bpark.companion.model.PredictedSentence;
 import io.vertx.core.json.Json;
 import io.vertx.rxjava.core.AbstractVerticle;
 import io.vertx.rxjava.core.eventbus.EventBus;
@@ -160,8 +162,12 @@ public class ClassificationVerticle extends AbstractVerticle {
     }
 
     private Observable<Void> saveMessage(String id, List<Map<String, Double>> analyses) {
+
+        List<PredictedSentence> predictedSentences = analyses.stream().map(PredictedSentence::new).collect(Collectors.toList());
+        ClassificationResult classificationResult = new ClassificationResult(predictedSentences);
+
         return vertx.sharedData().<String, String>rxGetClusterWideMap(id)
-                .flatMap(map -> map.rxPut(CLASSIFICATION_KEY, Json.encode(analyses)))
+                .flatMap(map -> map.rxPut(CLASSIFICATION_KEY, Json.encode(classificationResult)))
                 .toObservable();
     }
 
