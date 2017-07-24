@@ -13,7 +13,7 @@ public class DialogueStopWords implements StopwordsHandler, Serializable {
 
     private static final long serialVersionUID = -7227952739823739L;
 
-    private static final List<String> STOPS = Arrays.asList("I", "i");
+    private static final List<String> STOPS = Arrays.asList("I", "i", "it", "It");
 
     @Override
     public boolean isStopword(String word) {

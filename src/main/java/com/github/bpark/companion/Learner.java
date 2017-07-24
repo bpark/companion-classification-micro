@@ -22,6 +22,7 @@ import weka.classifiers.meta.FilteredClassifier;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ArffLoader;
+import weka.core.stemmers.LovinsStemmer;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 
 import java.io.BufferedReader;
@@ -55,6 +56,7 @@ public class Learner {
         trainData.setClassIndex(0);
         StringToWordVector filter = new StringToWordVector();
         filter.setStopwordsHandler(new DialogueStopWords());
+        filter.setStemmer(new LovinsStemmer());
         filter.setAttributeIndices("last");
         FilteredClassifier classifier = new FilteredClassifier();
         classifier.setFilter(filter);
