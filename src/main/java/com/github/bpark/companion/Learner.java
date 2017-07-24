@@ -54,6 +54,7 @@ public class Learner {
     public Classifier learn(Instances trainData) throws Exception {
         trainData.setClassIndex(0);
         StringToWordVector filter = new StringToWordVector();
+        filter.setStopwordsHandler(new DialogueStopWords());
         filter.setAttributeIndices("last");
         FilteredClassifier classifier = new FilteredClassifier();
         classifier.setFilter(filter);

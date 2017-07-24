@@ -27,17 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Observable;
 import rx.Single;
-import weka.classifiers.Classifier;
 import weka.classifiers.meta.FilteredClassifier;
-import weka.core.Attribute;
-import weka.core.DenseInstance;
-import weka.core.Instance;
-import weka.core.Instances;
 import weka.core.SerializationHelper;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,20 +44,19 @@ public class ClassificationVerticle extends AbstractVerticle {
     private static final String NLP_KEY = "nlp";
     private static final String CLASSIFICATION_KEY = "classification";
 
-    private static final String ATTR_CLASS = "class";
-    private static final String ATTR_TEXT = "text";
-
 
     @Override
     public void start() throws Exception {
 
-        vertx.<Classifier>rxExecuteBlocking(future -> {
+        vertx.<TextClassifier>rxExecuteBlocking(future -> {
 
             try {
 
-                Classifier classifier = loadClassifier();
+                TextClassifier textClassifier = new TextClassifier();
+                textClassifier.loadClassifier("/classifications/basic-dialogs.model");
+                textClassifier.registerClasses("greeting", "farewell", "other");
 
-                future.complete(classifier);
+                future.complete(textClassifier);
 
             } catch (Exception e) {
                 future.fail(e);
@@ -82,7 +74,7 @@ public class ClassificationVerticle extends AbstractVerticle {
         return (FilteredClassifier) SerializationHelper.read(inputStream);
     }
 
-    private void registerAnalyzer(Classifier classifier) {
+    private void registerAnalyzer(TextClassifier classifier) {
         EventBus eventBus = vertx.eventBus();
 
         MessageConsumer<String> consumer = eventBus.consumer(ADDRESS);
@@ -96,9 +88,7 @@ public class ClassificationVerticle extends AbstractVerticle {
                 List<Map<String, Double>> classifications = analyzedText.getSentences().stream().map(sentence -> {
                     logger.info("received sentence: {}", sentence);
 
-                    Instances instances = buildInstances(sentence.getRaw());
-
-                    Map<String, Double> classification = classify(classifier, instances);
+                    Map<String, Double> classification = classifier.classify(sentence.getRaw());
 
                     logger.info("evaluated classification: {}", classification);
 
@@ -108,50 +98,6 @@ public class ClassificationVerticle extends AbstractVerticle {
                 return Observable.just(classifications);
             }).flatMap(classifications -> saveMessage(id, classifications)).subscribe(a -> message.reply(id));
         });
-    }
-
-    private Instances buildInstances(String text) {
-
-        List<String> classes = new ArrayList<>();
-        classes.add("greeting");
-        classes.add("goodbye");
-        classes.add("other");
-        Attribute attributeClass = new Attribute(ATTR_CLASS, classes);
-        Attribute attributeText = new Attribute(ATTR_TEXT, (List<String>)null);
-
-        ArrayList<Attribute> attributes = new ArrayList<>();
-        attributes.add(attributeClass);
-        attributes.add(attributeText);
-
-        Instances instances = new Instances("Test relation", attributes, 1);
-        instances.setClassIndex(0);
-
-        Instance instance = new DenseInstance(2);
-
-        instance.setValue(attributeText, text);
-        instances.add(instance);
-
-        return instances;
-    }
-
-    private Map<String, Double> classify(Classifier classifier, Instances instances) {
-
-        Map<String, Double> distributionMap = new HashMap<>();
-
-        try {
-
-            double[] distributions = classifier.distributionForInstance(instances.instance(0));
-            for (int i = 0; i < distributions.length; i++) {
-                String classValue = instances.classAttribute().value(i);
-                double distribution = distributions[i];
-
-                distributionMap.put(classValue, distribution);
-            }
-        } catch (Exception e) {
-            logger.error("Error during classification", e);
-        }
-
-        return distributionMap;
     }
 
     private Observable<AnalyzedText> readMessage(String id) {
