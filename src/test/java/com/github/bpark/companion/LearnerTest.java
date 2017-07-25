@@ -5,7 +5,8 @@ import weka.classifiers.Classifier;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertThat;
 
 public class LearnerTest {
 
@@ -22,20 +23,20 @@ public class LearnerTest {
         textClassifier.registerClasses("greeting", "farewell", "weather", "other");
         textClassifier.loadClassifier("/topics.model");
 
-        assertTrue(0.9 < textClassifier.classify("It's rainy").get("weather"));
-        assertTrue(0.9 < textClassifier.classify("It's sunny").get("weather"));
-        assertTrue(0.9 < textClassifier.classify("It's cold").get("weather"));
-        assertTrue(0.9 < textClassifier.classify("The summer is hot").get("weather"));
-        assertTrue(0.9 < textClassifier.classify("The winter is cold").get("weather"));
-        assertTrue(0.9 < textClassifier.classify("It's hot outside").get("weather"));
-        assertTrue(0.9 < textClassifier.classify("The weather is bad").get("weather"));
-        assertTrue(0.9 < textClassifier.classify("The sun is shining").get("weather"));
+        assertThat(0.9, lessThan(textClassifier.classify("It's rainy").get("weather")));
+        assertThat(0.9, lessThan(textClassifier.classify("It's sunny").get("weather")));
+        assertThat(0.9, lessThan(textClassifier.classify("It's cold").get("weather")));
+        assertThat(0.9, lessThan(textClassifier.classify("The summer is hot").get("weather")));
+        assertThat(0.9, lessThan(textClassifier.classify("The winter is cold").get("weather")));
+        assertThat(0.9, lessThan(textClassifier.classify("It's hot outside").get("weather")));
+        assertThat(0.9, lessThan(textClassifier.classify("The weather is bad").get("weather")));
+        assertThat(0.9, lessThan(textClassifier.classify("The sun is shining").get("weather")));
 
-        assertTrue(0.9 < textClassifier.classify("How are you doing?").get("greeting"));
-        assertTrue(0.9 < textClassifier.classify("Hello John").get("greeting"));
-        assertTrue(0.9 < textClassifier.classify("Hi John").get("greeting"));
+        assertThat(0.9, lessThan(textClassifier.classify("How are you doing?").get("greeting")));
+        assertThat(0.9, lessThan(textClassifier.classify("Hello John").get("greeting")));
+        assertThat(0.9, lessThan(textClassifier.classify("Hi John").get("greeting")));
 
-        assertTrue(0.9 < textClassifier.classify("Bye Mary").get("farewell"));
+        assertThat(0.9, lessThan(textClassifier.classify("Bye Mary").get("farewell")));
 
     }
 }
