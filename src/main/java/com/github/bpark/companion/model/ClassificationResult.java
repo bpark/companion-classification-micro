@@ -4,13 +4,13 @@ import java.util.List;
 
 public class ClassificationResult {
 
-    private List<PredictedSentence> senteces;
+    private List<PredictedSentence> sentences;
 
-    public ClassificationResult(List<PredictedSentence> senteces) {
-        this.senteces = senteces;
+    public ClassificationResult(List<PredictedSentence> sentences) {
+        this.sentences = sentences;
     }
 
-    public List<PredictedSentence> getSenteces() {
-        return senteces;
+    public List<PredictedSentence> getSentences() {
+        return sentences;
     }
 }
