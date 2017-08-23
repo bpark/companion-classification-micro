@@ -1,11 +1,11 @@
 /*
- * Copyright 2017 Kurt Sparber
+ * Copyright 2017 bpark
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,6 +35,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * @author bpark
+ */
 public class ClassificationVerticle extends AbstractVerticle {
 
     private static final Logger logger = LoggerFactory.getLogger(ClassificationVerticle.class);
