@@ -15,6 +15,7 @@
  */
 package com.github.bpark.companion;
 
+import com.fasterxml.jackson.module.kotlin.KotlinModule;
 import com.github.bpark.companion.input.AnalyzedText;
 import com.github.bpark.companion.model.ClassificationResult;
 import com.github.bpark.companion.model.PredictedSentence;
@@ -50,6 +51,8 @@ public class ClassificationVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
+
+        Json.mapper.registerModule(new KotlinModule());
 
         vertx.<TextClassifier>rxExecuteBlocking(future -> {
 

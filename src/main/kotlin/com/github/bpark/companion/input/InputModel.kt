@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package com.github.bpark.companion.input;
+package com.github.bpark.companion.input
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-import java.util.List;
 
-/**
- * @author bpark
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AnalyzedText {
+data class AnalyzedText(val sentences: List<Sentence>)
 
-    private List<Sentence> sentences;
-
-    public List<Sentence> getSentences() {
-        return sentences;
-    }
-}
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class Sentence(val raw: String, val tokens: List<String>, val posTags: List<String>)
