@@ -42,7 +42,7 @@ class SentenceFeatureAnalyzerTest {
 
             val raw = it.raw
 
-            println("$raw")
+            println(raw)
             println("$transform")
         }
 
