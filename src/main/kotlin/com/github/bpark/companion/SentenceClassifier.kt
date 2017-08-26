@@ -8,18 +8,18 @@ import weka.core.Instances
 import weka.core.SerializationHelper
 import java.util.*
 
-class SentenceClassifier(val location: String) {
+class SentenceClassifier(location: String) {
 
     companion object {
-        const val ATTR_CLASS = "type"
-        const val ATTR_START = "start"
-        const val ATTR_P1 = "p1"
-        const val ATTR_P2 = "p2"
-        const val ATTR_P3 = "p3"
-        const val ATTR_P4 = "p4"
-        const val ATTR_P5 = "p5"
-        const val ATTR_P6 = "p6"
-        const val ATTR_END = "end"
+        private const val ATTR_CLASS = "type"
+        private const val ATTR_START = "start"
+        private const val ATTR_P1 = "p1"
+        private const val ATTR_P2 = "p2"
+        private const val ATTR_P3 = "p3"
+        private const val ATTR_P4 = "p4"
+        private const val ATTR_P5 = "p5"
+        private const val ATTR_P6 = "p6"
+        private const val ATTR_END = "end"
     }
 
     private val logger = KotlinLogging.logger {}

@@ -2,14 +2,20 @@ package com.github.bpark.companion
 
 import weka.classifiers.Classifier
 import weka.classifiers.Evaluation
+import weka.classifiers.bayes.NaiveBayes
+import weka.classifiers.meta.FilteredClassifier
 import weka.classifiers.trees.J48
 import weka.core.Instances
 import weka.core.converters.ArffLoader
+import weka.core.stemmers.LovinsStemmer
+import weka.filters.unsupervised.attribute.StringToWordVector
 import java.io.BufferedReader
 import java.io.FileReader
 import java.util.*
 
-class SentenceTypeLearner {
+abstract class AbstractLearner {
+
+    abstract fun learn(trainData: Instances): Classifier
 
     fun loadDataset(fileName: String): Instances {
         BufferedReader(FileReader(fileName)).use { reader ->
@@ -31,7 +37,30 @@ class SentenceTypeLearner {
 
     }
 
-    fun learn(trainData: Instances): Classifier {
+}
+
+class TextClassifierLearner: AbstractLearner() {
+
+    override fun learn(trainData: Instances): Classifier {
+        trainData.setClassIndex(0)
+        val filter = StringToWordVector()
+        filter.stopwordsHandler = DialogueStopWords()
+        filter.stemmer = LovinsStemmer()
+        filter.attributeIndices = "last"
+        val classifier = FilteredClassifier()
+        classifier.filter = filter
+        classifier.classifier = NaiveBayes()
+
+
+        classifier.buildClassifier(trainData)
+
+        return classifier
+    }
+}
+
+class SentenceTypeLearner: AbstractLearner() {
+
+    override fun learn(trainData: Instances): Classifier {
         trainData.setClassIndex(0)
 
         val classifier = J48()

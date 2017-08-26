@@ -30,7 +30,6 @@
         <vertx.version>3.4.1</vertx.version>
         <slf4j.jdk14.version>1.7.25</slf4j.jdk14.version>
         <kotlin.version>1.1.4-2</kotlin.version>
-        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <kotlin.logging.version>1.4.6</kotlin.logging.version>
         <jackson.module.kotlin.version>2.9.0</jackson.module.kotlin.version>
 
@@ -56,6 +55,7 @@
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <version>${kotlin.version}</version>
+
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -63,47 +63,18 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
                             </sourceDirs>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>test-compile</id>
                         <goals> <goal>test-compile</goal> </goals>
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
                             </sourceDirs>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <executions>
-                    <!-- Replacing default-compile as it is treated specially by maven -->
-                    <execution>
-                        <id>default-compile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <!-- Replacing default-testCompile as it is treated specially by maven -->
-                    <execution>
-                        <id>default-testCompile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>java-compile</id>
-                        <phase>compile</phase>
-                        <goals> <goal>compile</goal> </goals>
-                    </execution>
-                    <execution>
-                        <id>java-test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals> <goal>testCompile</goal> </goals>
                     </execution>
                 </executions>
             </plugin>
