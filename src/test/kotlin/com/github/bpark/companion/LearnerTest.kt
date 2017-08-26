@@ -16,6 +16,7 @@
 
 package com.github.bpark.companion
 
+import com.github.bpark.companion.input.Sentence
 import org.hamcrest.Matchers.lessThan
 import org.junit.Assert.assertThat
 import org.junit.Test
@@ -47,20 +48,22 @@ class LearnerTest {
         val textClassifier = TextClassifier("/topics.model")
         textClassifier.registerClasses("greeting", "farewell", "weather", "other")
 
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("It's rainy")["weather"]))
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("It's sunny")["weather"]))
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("It's cold")["weather"]))
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("The summer is hot")["weather"]))
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("The winter is cold")["weather"]))
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("It's hot outside")["weather"]))
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("The weather is bad")["weather"]))
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("The sun is shining")["weather"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("It's rainy"))["weather"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("It's sunny"))["weather"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("It's cold"))["weather"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("The summer is hot"))["weather"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("The winter is cold"))["weather"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("It's hot outside"))["weather"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("The weather is bad"))["weather"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("The sun is shining"))["weather"]))
 
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("How are you doing?")["greeting"]))
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("Hello John")["greeting"]))
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("Hi John")["greeting"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("How are you doing?"))["greeting"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("Hello John"))["greeting"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("Hi John"))["greeting"]))
 
-        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify("Bye Mary")["farewell"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("Bye Mary"))["farewell"]))
 
     }
+
+    private fun raw(raw: String) = Sentence(raw, emptyList(), emptyList())
 }

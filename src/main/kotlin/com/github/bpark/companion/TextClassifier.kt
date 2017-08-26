@@ -16,6 +16,7 @@
 
 package com.github.bpark.companion
 
+import com.github.bpark.companion.input.Sentence
 import mu.KotlinLogging
 import weka.classifiers.meta.FilteredClassifier
 import weka.core.Attribute
@@ -41,7 +42,10 @@ class TextClassifier(location: String) {
         this.classes.addAll(Arrays.asList(*classes))
     }
 
-    fun classify(text: String): Map<String, Double> {
+    fun classify(sentence: Sentence): Map<String, Double> {
+
+        val text = sentence.raw
+
         val instances = buildInstances(text)
         return classify(instances)
     }

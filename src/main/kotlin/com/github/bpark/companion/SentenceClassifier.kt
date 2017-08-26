@@ -16,6 +16,7 @@
 
 package com.github.bpark.companion
 
+import com.github.bpark.companion.input.Sentence
 import mu.KotlinLogging
 import weka.classifiers.trees.J48
 import weka.core.Attribute
@@ -49,8 +50,13 @@ class SentenceClassifier(location: String) {
         this.classes.addAll(Arrays.asList(*classes))
     }
 
-    fun classify(tokens: List<String>): Map<String, Double> {
-        val instances = buildInstances(tokens)
+    fun classify(sentence: Sentence): Map<String, Double> {
+
+        val transformed = SentenceFeatureTransformer.transform(sentence)
+
+        logger.info { "transformed: $transformed" }
+
+        val instances = buildInstances(transformed)
         return classify(instances)
     }
 

@@ -16,6 +16,7 @@
 
 package com.github.bpark.companion
 
+import com.github.bpark.companion.input.Sentence
 import org.junit.Test
 
 class SentenceClassifierTest {
@@ -25,10 +26,15 @@ class SentenceClassifierTest {
         val classifier = SentenceClassifier("/classifications/sentences.model")
         classifier.registerClasses("IMPERATIVE","DECLARATIVE","PEOPLE","LOCATION","OCCASION","REASON","INFORMATION","CHOICE","DESCRIPTION","QUANTITY","FREQUENCY","DISTANCE")
 
-        val tokens = listOf("(*)","(often/JT)","(_/VERB)","(*)","(*)","(*)","(*)","(./.)")
+        val sentence = Sentence("What is your name?",
+                listOf("What", "is", "your", "name", "?"),
+                listOf("WP", "VBZ", "PRP$", "NN", "."))
 
-        val classify = classifier.classify(tokens)
+        //val tokens = listOf("(*)","(often/JT)","(_/VERB)","(*)","(*)","(*)","(*)","(./.)")
+
+        val classify = classifier.classify(sentence)
 
         println(classify)
     }
+
 }

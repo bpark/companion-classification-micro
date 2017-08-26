@@ -58,7 +58,7 @@ class ClassificationVerticle : AbstractVerticle() {
 
         }.toObservable().subscribe(
                 { this.registerAnalyzer(it) },
-                { error -> logger.error("faild to load classifier models!", error) }
+                { error -> logger.error("failed to load classifier models!", error) }
         )
 
     }
@@ -78,7 +78,7 @@ class ClassificationVerticle : AbstractVerticle() {
 
                     logger.info { "received sentence: $sentence" }
 
-                    val classification = classifier.classify(sentence.raw)
+                    val classification = classifier.classify(sentence)
 
                     logger.info { "evaluated classification: $classification" }
 
