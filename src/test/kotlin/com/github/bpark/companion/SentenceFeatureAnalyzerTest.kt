@@ -39,7 +39,12 @@ class SentenceFeatureAnalyzerTest {
         analyzedText.sentences.forEach {
             val transform = SentenceFeatureTransformer.transform(it)
             Assert.assertEquals(transform.joinToString(" "), 8, transform.size)
+
+            val raw = it.raw
+
+            println("$raw")
+            println("$transform")
         }
-        
+
     }
 }

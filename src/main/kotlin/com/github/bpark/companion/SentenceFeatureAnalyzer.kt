@@ -26,16 +26,16 @@ typealias AnalyzedToken = Pair<String, String>
 
 private object TokenConstants {
 
-    const val VTAG = "V"
-    const val JTAG = "J"
-    const val WHTAG = "WH"
+    const val VTAG = "VERB"
+    const val JTAG = "JT"
+    const val WHTAG = "WHQ"
     const val ITAG = "."
 
     val ANY = AnalyzedToken("", "*")
     val VERB = AnalyzedToken("_", VTAG)
     val START = AnalyzedToken("", "^")
 
-    val ANALYZER_TAGS = listOf<String>(WHTAG, VTAG, JTAG, ITAG)
+    val ANALYZER_TAGS = listOf(WHTAG, VTAG, JTAG, ITAG)
 }
 
 private interface SentenceTransformer {
@@ -50,14 +50,14 @@ private interface SentenceTransformer {
 
 private object RelevantTokenTransformer : SentenceTransformer {
 
-    val jTypes = listOf<String>("much", "often", "many", "far")
+    val jTypes = listOf("much", "often", "many", "far")
 
     override fun transform(analyzedTokens: List<AnalyzedToken>): List<AnalyzedToken> {
         val filteredTokens = analyzedTokens.map { if (startsWith(it.second, TokenConstants.ANALYZER_TAGS)) it else TokenConstants.ANY }.toMutableList()
-        filteredTokens.forEachIndexed { index, pair ->
+        filteredTokens.forEachIndexed { index, (first, second) ->
             run {
-                if (pair.second == TokenConstants.VTAG) filteredTokens.set(index, TokenConstants.VERB)
-                if (pair.second == TokenConstants.JTAG && !jTypes.contains(pair.first) ) filteredTokens.set(index, TokenConstants.ANY)
+                if (second == TokenConstants.VTAG) filteredTokens[index] = TokenConstants.VERB
+                if (second == TokenConstants.JTAG && !jTypes.contains(first) ) filteredTokens[index] = TokenConstants.ANY
             }
         }
         return filteredTokens
@@ -125,7 +125,7 @@ object SentenceFeatureTransformer {
 
     private val logger = KotlinLogging.logger {}
 
-    fun transform(sentence: Sentence): List<AnalyzedToken> {
+    fun transform(sentence: Sentence): List<String> {
 
         logger.info { "analyzing sentence $sentence" }
 
@@ -145,7 +145,7 @@ object SentenceFeatureTransformer {
 
         logger.info { "analyzed tokens $analyzedTokens" }
 
-        return analyzedTokens
+        return analyzedTokens.map { render(it) }
     }
 
     private fun mapToAnalyzed(tokens: List<String>, tags: List<String>): List<AnalyzedToken> {
@@ -162,7 +162,7 @@ object SentenceFeatureTransformer {
             if (tag == "JJ" || tag == "RB") {
                 tag = TokenConstants.JTAG
             }
-            tokenTags.add(Pair(token, tag))
+            tokenTags.add(Pair(token.toLowerCase(), tag))
         }
 
         if (tags.last() != ".") {
@@ -172,10 +172,14 @@ object SentenceFeatureTransformer {
         return tokenTags
     }
 
+    private fun render(analyzedToken: AnalyzedToken): String {
+        val (token, tag) = analyzedToken
+        return if (token.isNotEmpty()) {
+            "($token/$tag)"
+        } else {
+            "($tag)"
+        }
+    }
+
 }
 
-fun main(args: Array<String>) {
-    val transform = SentenceFeatureTransformer.transform(Sentence("What is your name?", listOf("What", "is", "your", "name", "?"), listOf("WP", "VBZ", "PRP$", "NN", ".")))
-    println()
-    println(transform.joinToString(" "))
-}

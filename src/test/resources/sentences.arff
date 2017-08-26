@@ -1,0 +1,51 @@
+@RELATION sententcetypes
+
+@ATTRIBUTE type {IMPERATIVE,DECLARATIVE,PEOPLE,LOCATION,OCCASION,REASON,INFORMATION,CHOICE,DESCRIPTION,QUANTITY,FREQUENCY,DISTANCE}
+@ATTRIBUTE start {(^),(*)}
+@ATTRIBUTE p1 {(what/WHQ),(_/VERB),(*),(how/WHQ),(much/JT),(many/JT),(often/JT),(far/JT),(when/WHQ),(whose/WHQ),(who/WHQ),(where/WHQ),(why/WHQ)}
+@ATTRIBUTE p2 {(what/WHQ),(_/VERB),(*),(how/WHQ),(much/JT),(many/JT),(often/JT),(far/JT),(when/WHQ),(whose/WHQ),(who/WHQ),(where/WHQ),(why/WHQ)}
+@ATTRIBUTE p3 {(what/WHQ),(_/VERB),(*),(how/WHQ),(much/JT),(many/JT),(often/JT),(far/JT),(when/WHQ),(whose/WHQ),(who/WHQ),(where/WHQ),(why/WHQ)}
+@ATTRIBUTE p4 {(what/WHQ),(_/VERB),(*),(how/WHQ),(much/JT),(many/JT),(often/JT),(far/JT),(when/WHQ),(whose/WHQ),(who/WHQ),(where/WHQ),(why/WHQ)}
+@ATTRIBUTE p5 {(what/WHQ),(_/VERB),(*),(how/WHQ),(much/JT),(many/JT),(often/JT),(far/JT),(when/WHQ),(whose/WHQ),(who/WHQ),(where/WHQ),(why/WHQ)}
+@ATTRIBUTE p6 {(what/WHQ),(_/VERB),(*),(how/WHQ),(much/JT),(many/JT),(often/JT),(far/JT),(when/WHQ),(whose/WHQ),(who/WHQ),(where/WHQ),(why/WHQ)}
+@ATTRIBUTE end {(./.),(!/.),(?/.)}
+
+@DATA
+%
+IMPERATIVE,(^),(_/VERB),(*),(*),(*),(*),(*),(!/.)
+IMPERATIVE,(*),(_/VERB),(*),(*),(*),(*),(*),(!/.)
+%
+DECLARATIVE,(*),(*),(*),(*),(*),(*),(*),(./.)
+DECLARATIVE,(*),(what/WHQ),(_/VERB),(*),(*),(*),(*),(./.)
+DECLARATIVE,(*),(what/WHQ),(_/VERB),(*),(*),(*),(*),(./.)
+DECLARATIVE,(*),(often/JT),(_/VERB),(*),(*),(*),(*),(./.)
+DECLARATIVE,(*),(_/VERB),(*),(*),(*),(*),(*),(./.)
+DECLARATIVE,(^),(_/VERB),(*),(much/JT),(*),(*),(*),(./.)
+DECLARATIVE,(*),(_/VERB),(*),(much/JT),(*),(*),(*),(./.)
+DECLARATIVE,(*),(_/VERB),(*),(when/WHQ),(*),(*),(*),(./.)
+DECLARATIVE,(*),(*),(*),(*),(*),(*),(*),(./.)
+DECLARATIVE,(*),(whose/WHQ),(*),(_/VERB),(*),(*),(*),(./.)
+DECLARATIVE,(*),(what/WHQ),(_/VERB),(*),(*),(*),(*),(./.)
+%
+PEOPLE,(^),(who/WHQ),(_/VERB),(*),(*),(*),(*),(?/.)
+%
+LOCATION,(^),(where/WHQ),(_/VERB),(*),(*),(*),(*),(?/.)
+%
+OCCASION,(^),(when/WHQ),(_/VERB),(*),(*),(*),(*),(?/.)
+%
+REASON,(^),(why/WHQ),(_/VERB),(*),(*),(*),(*),(?/.)
+%
+INFORMATION,(^),(what/WHQ),(_/VERB),(*),(*),(*),(*),(?/.)
+%
+CHOICE,(*),(_/VERB),(*),(*),(*),(*),(*),(?/.)
+%
+DESCRIPTION,(^),(how/WHQ),(_/VERB),(*),(*),(*),(*),(?/.)
+DESCRIPTION,(^),(how/WHQ),(*),(_/VERB),(*),(*),(*),(?/.)
+%
+QUANTITY,(^),(how/WHQ),(much/JT),(*),(_/VERB),(*),(*),(?/.)
+QUANTITY,(^),(how/WHQ),(much/JT),(_/VERB),(*),(*),(*),(?/.)
+QUANTITY,(^),(how/WHQ),(many/JT),(*),(_/VERB),(*),(*),(?/.)
+%
+FREQUENCY,(^),(how/WHQ),(often/JT),(_/VERB),(*),(*),(*),(?/.)
+%
+DISTANCE,(^),(how/WHQ),(far/JT),(_/VERB),(*),(*),(*),(?/.)

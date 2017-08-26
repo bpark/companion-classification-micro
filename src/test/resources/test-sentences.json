@@ -200,6 +200,171 @@
             "raw": "Political integration, especially in Europe, emerged as an effort to end pre-war enmities and to create a common identity.",
             "tokens": ["Political", "integration", ",", "especially", "in", "Europe", ",", "emerged", "as", "an", "effort", "to", "end", "pre-war", "enmities", "and", "to", "create", "a", "common", "identity", "."],
             "posTags": ["JJ", "NN", ",", "RB", "IN", "NNP", ",", "VBD", "IN", "DT", "NN", "TO", "VB", "JJ", "NNS", "CC", "TO", "VB", "DT", "JJ", "NN", "."]
+        },
+        {
+            "raw": "Who is the best football player in the world?",
+            "tokens": ["Who", "is", "the", "best", "football", "player", "in", "the", "world", "?"],
+            "posTags": ["WP", "VBZ", "DT", "JJS", "NN", "NN", "IN", "DT", "NN", "."]
+        },
+        {
+            "raw": "Who are your best friends?",
+            "tokens": ["Who", "are", "your", "best", "friends", "?"],
+            "posTags": ["WP", "VBP", "PRP$", "JJS", "NNS", "."]
+        },
+        {
+            "raw": "Who is that strange guy over there?",
+            "tokens": ["Who", "is", "that", "strange", "guy", "over", "there", "?"],
+            "posTags": ["WP", "VBZ", "DT", "JJ", "NN", "IN", "RB", "."]
+        },
+        {
+            "raw": "Where is the library?",
+            "tokens": ["Where", "is", "the", "library", "?"],
+            "posTags": ["WRB", "VBZ", "DT", "NN", "."]
+        },
+        {
+            "raw": "Where do you live?",
+            "tokens": ["Where", "do", "you", "live", "?"],
+            "posTags": ["WRB", "VBP", "PRP", "VB", "."]
+        },
+        {
+            "raw": "Where are my shoes?",
+            "tokens": ["Where", "are", "my", "shoes", "?"],
+            "posTags": ["WRB", "VBP", "PRP$", "NNS", "."]
+        },
+        {
+            "raw": "When do the shops open?",
+            "tokens": ["When", "do", "the", "shops", "open", "?"],
+            "posTags": ["WRB", "VBP", "DT", "NNS", "JJ", "."]
+        },
+        {
+            "raw": "When is his birthday?",
+            "tokens": ["When", "is", "his", "birthday", "?"],
+            "posTags": ["WRB", "VBZ", "PRP$", "NN", "."]
+        },
+        {
+            "raw": "When are we going to finish?",
+            "tokens": ["When", "are", "we", "going", "to", "finish", "?"],
+            "posTags": ["WRB", "VBP", "PRP", "VBG", "TO", "VB", "."]
+        },
+        {
+            "raw": "Why do we need a nanny?",
+            "tokens": ["Why", "do", "we", "need", "a", "nanny", "?"],
+            "posTags": ["WRB", "VBP", "PRP", "VB", "DT", "NN", "."]
+        },
+        {
+            "raw": "Why are they always late?",
+            "tokens": ["Why", "are", "they", "always", "late", "?"],
+            "posTags": ["WRB", "VBP", "PRP", "RB", "RB", "."]
+        },
+        {
+            "raw": "Why does he complain all the time?",
+            "tokens": ["Why", "does", "he", "complain", "all", "the", "time", "?"],
+            "posTags": ["WRB", "VBZ", "PRP", "VB", "DT", "DT", "NN", "."]
+        },
+        {
+            "raw": "What is your name?",
+            "tokens": ["What", "is", "your", "name", "?"],
+            "posTags": ["WP", "VBZ", "PRP$", "NN", "."]
+        },
+        {
+            "raw": "What is her favourite colour?",
+            "tokens": ["What", "is", "her", "favourite", "colour", "?"],
+            "posTags": ["WP", "VBZ", "PRP$", "JJ", "NN", "."]
+        },
+        {
+            "raw": "What is the time?",
+            "tokens": ["What", "is", "the", "time", "?"],
+            "posTags": ["WP", "VBZ", "DT", "NN", "."]
+        },
+        {
+            "raw": "Which drink did you order?",
+            "tokens": ["Which", "drink", "did", "you", "order", "?"],
+            "posTags": ["WDT", "NN", "VBD", "PRP", "NN", "."]
+        },
+        {
+            "raw": "Which day do you prefer for a meeting Which is better - this one or that one?",
+            "tokens": ["Which", "day", "do", "you", "prefer", "for", "a", "meeting", "Which", "is", "better", "-", "this", "one", "or", "that", "one", "?"],
+            "posTags": ["WDT", "NN", "VBP", "PRP", "VB", "IN", "DT", "NN", "WDT", "VBZ", "JJR", ":", "DT", "CD", "CC", "DT", "CD", "."]
+        },
+        {
+            "raw": "How do you cook paella?",
+            "tokens": ["How", "do", "you", "cook", "paella", "?"],
+            "posTags": ["WRB", "VBP", "PRP", "VB", "NN", "."]
+        },
+        {
+            "raw": "How does he know the answer?",
+            "tokens": ["How", "does", "he", "know", "the", "answer", "?"],
+            "posTags": ["WRB", "VBZ", "PRP", "VB", "DT", "NN", "."]
+        },
+        {
+            "raw": "How can I learn English quickly?",
+            "tokens": ["How", "can", "I", "learn", "English", "quickly", "?"],
+            "posTags": ["WRB", "MD", "PRP", "VB", "JJ", "RB", "."]
+        },
+        {
+            "raw": "How much money will I need?",
+            "tokens": ["How", "much", "money", "will", "I", "need", "?"],
+            "posTags": ["WRB", "JJ", "NN", "MD", "PRP", "VB", "."]
+        },
+        {
+            "raw": "How much time do you have to finish the test?",
+            "tokens": ["How", "much", "time", "do", "you", "have", "to", "finish", "the", "test", "?"],
+            "posTags": ["WRB", "JJ", "NN", "VBP", "PRP", "VB", "TO", "VB", "DT", "NN", "."]
+        },
+        {
+            "raw": "How much is the jacket on display in the window?",
+            "tokens": ["How", "much", "is", "the", "jacket", "on", "display", "in", "the", "window", "?"],
+            "posTags": ["WRB", "RB", "VBZ", "DT", "NN", "IN", "NN", "IN", "DT", "NN", "."]
+        },
+        {
+            "raw": "How many brothers and sister do you have?",
+            "tokens": ["How", "many", "brothers", "and", "sister", "do", "you", "have", "?"],
+            "posTags": ["WRB", "JJ", "NNS", "CC", "NN", "VBP", "PRP", "VB", "."]
+        },
+        {
+            "raw": "How many days are there in April?",
+            "tokens": ["How", "many", "days", "are", "there", "in", "April", "?"],
+            "posTags": ["WRB", "JJ", "NNS", "VBP", "RB", "IN", "NNP", "."]
+        },
+        {
+            "raw": "How many people live in this city?",
+            "tokens": ["How", "many", "people", "live", "in", "this", "city", "?"],
+            "posTags": ["WRB", "JJ", "NNS", "VBP", "IN", "DT", "NN", "."]
+        },
+        {
+            "raw": "How often does she study?",
+            "tokens": ["How", "often", "does", "she", "study", "?"],
+            "posTags": ["WRB", "RB", "VBZ", "PRP", "VB", "."]
+        },
+        {
+            "raw": "How often do you visit your grandmother?",
+            "tokens": ["How", "often", "do", "you", "visit", "your", "grandmother", "?"],
+            "posTags": ["WRB", "RB", "VBP", "PRP", "VB", "PRP$", "NN", "."]
+        },
+        {
+            "raw": "How often are you sick?",
+            "tokens": ["How", "often", "are", "you", "sick", "?"],
+            "posTags": ["WRB", "RB", "VBP", "PRP", "JJ", "."]
+        },
+        {
+            "raw": "How far is the bus stop from here?",
+            "tokens": ["How", "far", "is", "the", "bus", "stop", "from", "here", "?"],
+            "posTags": ["WRB", "RB", "VBZ", "DT", "NN", "NN", "IN", "RB", "."]
+        },
+        {
+            "raw": "How far is the university from your house?",
+            "tokens": ["How", "far", "is", "the", "university", "from", "your", "house", "?"],
+            "posTags": ["WRB", "RB", "VBZ", "DT", "NN", "IN", "PRP$", "NN", "."]
+        },
+        {
+            "raw": "The word what is a question word.",
+            "tokens": ["The", "word", "what", "is", "a", "question", "word", "."],
+            "posTags": ["DT", "NN", "WP", "VBZ", "DT", "NN", "NN", "."]
+        },
+        {
+            "raw": "word what is question word.",
+            "tokens": ["word", "what", "is", "question", "word", "."],
+            "posTags": ["NN", "WP", "VBZ", "NN", "NN", "."]
         }
     ]
 }
