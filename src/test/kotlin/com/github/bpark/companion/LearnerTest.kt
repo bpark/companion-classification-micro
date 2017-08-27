@@ -16,7 +16,10 @@
 
 package com.github.bpark.companion
 
+import com.github.bpark.companion.classifier.TextClassifier
 import com.github.bpark.companion.input.Sentence
+import com.github.bpark.companion.learn.SentenceTypeLearner
+import com.github.bpark.companion.learn.TextClassifierLearner
 import org.hamcrest.Matchers.lessThan
 import org.junit.Assert.assertThat
 import org.junit.Test
@@ -45,8 +48,7 @@ class LearnerTest {
 
         SerializationHelper.write("target/classes/topics.model", classifier)
 
-        val textClassifier = TextClassifier("/topics.model")
-        textClassifier.registerClasses("greeting", "farewell", "weather", "other")
+        val textClassifier = TextClassifier("/topics.model", listOf("greeting", "farewell", "weather", "other"))
 
         assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("It's rainy"))["weather"]))
         assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("It's sunny"))["weather"]))

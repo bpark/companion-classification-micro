@@ -16,6 +16,7 @@
 
 package com.github.bpark.companion
 
+import com.github.bpark.companion.classifier.TextClassifier
 import com.github.bpark.companion.input.Sentence
 import org.hamcrest.Matchers.lessThan
 import org.junit.Assert.assertThat
@@ -25,8 +26,7 @@ class TextClassifierTest {
 
     @Test
     fun testClassify() {
-        val classifier = TextClassifier("/classifications/basic-dialogs.model")
-        classifier.registerClasses("greeting", "farewell", "other")
+        val classifier = TextClassifier("/classifications/basic-dialogs.model", listOf("greeting", "farewell", "other"))
 
         assertThat<Double>(0.9, lessThan<Double>(classifier.classify(raw("Hello John"))["greeting"]))
 

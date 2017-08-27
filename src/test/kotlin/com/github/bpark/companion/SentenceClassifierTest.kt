@@ -16,6 +16,7 @@
 
 package com.github.bpark.companion
 
+import com.github.bpark.companion.classifier.SentenceClassifier
 import com.github.bpark.companion.input.Sentence
 import org.hamcrest.Matchers.lessThan
 import org.junit.Assert.assertThat
@@ -28,8 +29,8 @@ class SentenceClassifierTest {
 
     @Before
     fun init() {
-        classifier = SentenceClassifier("/classifications/sentences.model")
-        classifier.registerClasses("IMPERATIVE","DECLARATIVE","PEOPLE","LOCATION","OCCASION","REASON","INFORMATION","CHOICE","DESCRIPTION","QUANTITY","FREQUENCY","DISTANCE")
+        classifier = SentenceClassifier("/classifications/sentences.model",
+                listOf("IMPERATIVE","DECLARATIVE","PEOPLE","LOCATION","OCCASION","REASON","INFORMATION","CHOICE","DESCRIPTION","QUANTITY","FREQUENCY","DISTANCE"))
 
     }
 

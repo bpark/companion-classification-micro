@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package com.github.bpark.companion.output
+package com.github.bpark.companion.classifier
 
+import com.github.bpark.companion.input.Sentence
 
-data class PredictedSentence(val predictions: Map<String, Map<String, Double>>)
+abstract class PhraseClassifier {
 
-data class ClassificationResult(val sentences: List<PredictedSentence>)
+    abstract fun classify(sentence: Sentence): Map<String, Double>
+
+    abstract fun name(): String
+}

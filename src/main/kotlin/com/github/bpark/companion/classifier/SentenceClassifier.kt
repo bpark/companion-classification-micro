@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.bpark.companion
+package com.github.bpark.companion.classifier
 
 import com.github.bpark.companion.input.Sentence
 import mu.KotlinLogging
@@ -22,7 +22,7 @@ import weka.classifiers.trees.J48
 import weka.core.*
 import java.util.*
 
-class SentenceClassifier(location: String) {
+class SentenceClassifier(location: String, private val classes: List<String>) : PhraseClassifier() {
 
     companion object {
         private const val ATTR_CLASS = "type"
@@ -44,14 +44,8 @@ class SentenceClassifier(location: String) {
 
     private var classifier: J48 = SerializationHelper.read(this.javaClass.getResourceAsStream(location)) as J48
 
-    private var classes: MutableList<String> = mutableListOf()
 
-
-    fun registerClasses(vararg classes: String) {
-        this.classes.addAll(Arrays.asList(*classes))
-    }
-
-    fun classify(sentence: Sentence): Map<String, Double> {
+    override fun classify(sentence: Sentence): Map<String, Double> {
 
         val transformed = SentenceFeatureTransformer.transform(sentence)
 
@@ -60,6 +54,8 @@ class SentenceClassifier(location: String) {
         val instances = buildInstances(transformed)
         return classify(instances)
     }
+
+    override fun name(): String = "phraseType"
 
     private fun buildInstances(tokens: List<String>): Instances {
 

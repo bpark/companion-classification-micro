@@ -17,6 +17,7 @@
 package com.github.bpark.companion
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.github.bpark.companion.classifier.SentenceFeatureTransformer
 import com.github.bpark.companion.input.AnalyzedText
 import io.vertx.core.json.Json
 import org.apache.commons.io.IOUtils

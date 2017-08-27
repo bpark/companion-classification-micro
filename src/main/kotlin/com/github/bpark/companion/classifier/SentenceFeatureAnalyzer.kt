@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.bpark.companion
+package com.github.bpark.companion.classifier
 
 import com.github.bpark.companion.input.Sentence
 import mu.KotlinLogging

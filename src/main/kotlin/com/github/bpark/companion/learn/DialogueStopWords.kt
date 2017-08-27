@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.bpark.companion
+package com.github.bpark.companion.learn
 
 import weka.core.stopwords.StopwordsHandler
 import java.io.Serializable

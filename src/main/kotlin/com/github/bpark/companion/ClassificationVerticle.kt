@@ -17,6 +17,9 @@
 package com.github.bpark.companion
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.github.bpark.companion.classifier.PhraseClassifier
+import com.github.bpark.companion.classifier.SentenceClassifier
+import com.github.bpark.companion.classifier.TextClassifier
 import com.github.bpark.companion.input.AnalyzedText
 import com.github.bpark.companion.output.ClassificationResult
 import com.github.bpark.companion.output.PredictedSentence
@@ -36,6 +39,11 @@ class ClassificationVerticle : AbstractVerticle() {
 
         private const val NLP_KEY = "nlp"
         private const val CLASSIFICATION_KEY = "classification"
+
+        private val TOPIC_CLASSES = listOf("greeting", "farewell", "other")
+        private val SENTENCE_CLASSES = listOf("IMPERATIVE","DECLARATIVE","PEOPLE","LOCATION","OCCASION","REASON",
+                "INFORMATION","CHOICE","DESCRIPTION","QUANTITY","FREQUENCY","DISTANCE")
+
     }
 
     @Throws(Exception::class)
@@ -43,14 +51,16 @@ class ClassificationVerticle : AbstractVerticle() {
 
         Json.mapper.registerModule(KotlinModule())
 
-        vertx.rxExecuteBlocking<TextClassifier> { future ->
+        vertx.rxExecuteBlocking<List<PhraseClassifier>> { future ->
 
             try {
 
-                val textClassifier = TextClassifier("/classifications/basic-dialogs.model")
-                textClassifier.registerClasses("greeting", "farewell", "other")
+                val classifiers = listOf(
+                        TextClassifier("/classifications/basic-dialogs.model", TOPIC_CLASSES),
+                        SentenceClassifier("/classifications/sentences.model", SENTENCE_CLASSES)
+                )
 
-                future.complete(textClassifier)
+                future.complete(classifiers)
 
             } catch (e: Exception) {
                 future.fail(e)
@@ -63,7 +73,7 @@ class ClassificationVerticle : AbstractVerticle() {
 
     }
 
-    private fun registerAnalyzer(classifier: TextClassifier) {
+    private fun registerAnalyzer(classifier: List<PhraseClassifier>) {
         val eventBus = vertx.eventBus()
 
         val consumer = eventBus.consumer<String>(ADDRESS)
@@ -78,11 +88,11 @@ class ClassificationVerticle : AbstractVerticle() {
 
                     logger.info { "received sentence: $sentence" }
 
-                    val classification = classifier.classify(sentence)
+                    val classifications = classifier.associateBy({it.name()}, {it.classify(sentence)})
 
-                    logger.info { "evaluated classification: $classification" }
+                    logger.info { "evaluated classification: $classifications" }
 
-                    classification
+                    classifications
                 }.toList()
 
                 Observable.just(classifications)
@@ -97,7 +107,7 @@ class ClassificationVerticle : AbstractVerticle() {
                 .toObservable()
     }
 
-    private fun saveMessage(id: String, analyses: List<Map<String, Double>>): Observable<Void> {
+    private fun saveMessage(id: String, analyses: List<Map<String, Map<String, Double>>>): Observable<Void> {
 
         val predictedSentences = analyses.map { PredictedSentence(it) }
         val classificationResult = ClassificationResult(predictedSentences)
