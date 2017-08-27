@@ -19,10 +19,7 @@ package com.github.bpark.companion
 import com.github.bpark.companion.input.Sentence
 import mu.KotlinLogging
 import weka.classifiers.trees.J48
-import weka.core.Attribute
-import weka.core.DenseInstance
-import weka.core.Instances
-import weka.core.SerializationHelper
+import weka.core.*
 import java.util.*
 
 class SentenceClassifier(location: String) {
@@ -37,6 +34,10 @@ class SentenceClassifier(location: String) {
         private const val ATTR_P5 = "p5"
         private const val ATTR_P6 = "p6"
         private const val ATTR_END = "end"
+
+        private val START_VALUES = listOf("(^)","(*)")
+        private val PX_VALUES = listOf("(what/WHQ)","(_/VERB)","(*)","(how/WHQ)","(much/JT)","(many/JT)","(often/JT)","(far/JT)","(when/WHQ)","(whose/WHQ)","(who/WHQ)","(where/WHQ)","(why/WHQ)")
+        private val END_VALUES = listOf("(DT/.)","(EM/.)","(QM/.)")
     }
 
     private val logger = KotlinLogging.logger {}
@@ -63,15 +64,15 @@ class SentenceClassifier(location: String) {
     private fun buildInstances(tokens: List<String>): Instances {
 
         val attributes = arrayListOf(
-                Attribute(ATTR_CLASS, classes),
-                Attribute(ATTR_START, null as List<String>?),
-                Attribute(ATTR_P1, null as List<String>?),
-                Attribute(ATTR_P2, null as List<String>?),
-                Attribute(ATTR_P3, null as List<String>?),
-                Attribute(ATTR_P4, null as List<String>?),
-                Attribute(ATTR_P5, null as List<String>?),
-                Attribute(ATTR_P6, null as List<String>?),
-                Attribute(ATTR_END, null as List<String>?)
+                Attribute(ATTR_CLASS, classes, 0),
+                Attribute(ATTR_START, START_VALUES, 1),
+                Attribute(ATTR_P1, PX_VALUES, 2),
+                Attribute(ATTR_P2, PX_VALUES, 3),
+                Attribute(ATTR_P3, PX_VALUES, 4),
+                Attribute(ATTR_P4, PX_VALUES, 5),
+                Attribute(ATTR_P5, PX_VALUES, 6),
+                Attribute(ATTR_P6, PX_VALUES, 7),
+                Attribute(ATTR_END, END_VALUES, 8)
         )
 
         val instances = Instances("Test relation", attributes, 1)
@@ -79,7 +80,7 @@ class SentenceClassifier(location: String) {
 
         val instance = DenseInstance(9)
 
-        attributes.drop(1).forEachIndexed { index, attribute -> instance.setValue(attribute, tokens[index]) }
+        attributes.drop(1).forEachIndexed { index, attribute -> instance.setValue(attribute, Utils.quote(tokens[index])) }
 
         instances.add(instance)
 

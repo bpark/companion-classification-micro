@@ -81,6 +81,17 @@ class SentenceTypeLearner: AbstractLearner() {
 
         val classifier = J48()
         classifier.options = arrayOf()
+        //classifier.options = arrayOf("-C 0.05", "-M 1", "-N 3")
+        //options.add("-U") // unpruned tree
+        //options.add("-C 0.05")         // confidence threshold for pruning. (Default: 0.25)
+        //options.add("-M 1")            // minimum number of instances per leaf. (Default: 2)
+        //options.add("-R");            // use reduced error pruning. No subtree raising is performed.
+        //options.add("-N 3")            // number of folds for reduced error pruning. One fold is used as the pruning set. (Default: 3)
+        //options.add("-B");            // Use binary splits for nominal attributes.
+        //options.add("-S");            // not perform subtree raising.
+        //options.add("-L");            // not clean up after the tree has been built.
+        //options.add("-A");            // if set, Laplace smoothing is used for predicted probabilites.
+        //options.add("-Q");            // The seed for reduced-error pruning.
 
         classifier.buildClassifier(trainData)
 

@@ -30,10 +30,15 @@ private object TokenConstants {
     const val JTAG = "JT"
     const val WHTAG = "WHQ"
     const val ITAG = "."
+    const val QTAG = "?"
+    const val ETAG = "!"
 
     val ANY = AnalyzedToken("", "*")
     val VERB = AnalyzedToken("_", VTAG)
     val START = AnalyzedToken("", "^")
+    val QM = AnalyzedToken("QM", ".")
+    val EM = AnalyzedToken("EM", ".")
+    val DT = AnalyzedToken("DT", ".")
 
     val ANALYZER_TAGS = listOf(WHTAG, VTAG, JTAG, ITAG)
 }
@@ -120,6 +125,28 @@ private object FillTokenTransformer : SentenceTransformer {
 
 }
 
+private object EndTokenTransformer : SentenceTransformer {
+
+    override fun transform(analyzedTokens: List<AnalyzedToken>): List<AnalyzedToken> {
+
+        val tokens = analyzedTokens.toMutableList()
+
+        val (token, _) = tokens.last()
+        if (token == TokenConstants.QTAG) {
+            tokens[tokens.lastIndex] = TokenConstants.QM
+        }
+        if (token == TokenConstants.ETAG) {
+            tokens[tokens.lastIndex] = TokenConstants.EM
+        }
+        if (token == TokenConstants.ITAG) {
+            tokens[tokens.lastIndex] = TokenConstants.DT
+        }
+
+        return tokens
+    }
+
+}
+
 
 object SentenceFeatureTransformer {
 
@@ -135,7 +162,8 @@ object SentenceFeatureTransformer {
         val transformers = listOf<SentenceTransformer>(RelevantTokenTransformer,
                 DuplicateTokenTransformer,
                 StartTokenTransformer,
-                FillTokenTransformer)
+                FillTokenTransformer,
+                EndTokenTransformer)
 
         var analyzedTokens = mapToAnalyzed(tokens, tags)
 

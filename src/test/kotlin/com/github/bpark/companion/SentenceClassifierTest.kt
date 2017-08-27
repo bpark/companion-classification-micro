@@ -17,24 +17,52 @@
 package com.github.bpark.companion
 
 import com.github.bpark.companion.input.Sentence
+import org.hamcrest.Matchers.lessThan
+import org.junit.Assert.assertThat
+import org.junit.Before
 import org.junit.Test
 
 class SentenceClassifierTest {
 
-    @Test
-    fun testClassifier() {
-        val classifier = SentenceClassifier("/classifications/sentences.model")
+    lateinit var classifier: SentenceClassifier
+
+    @Before
+    fun init() {
+        classifier = SentenceClassifier("/classifications/sentences.model")
         classifier.registerClasses("IMPERATIVE","DECLARATIVE","PEOPLE","LOCATION","OCCASION","REASON","INFORMATION","CHOICE","DESCRIPTION","QUANTITY","FREQUENCY","DISTANCE")
 
-        val sentence = Sentence("What is your name?",
+    }
+
+    @Test
+    fun testInformationClassification() {
+
+        val information = Sentence("What is your name?",
                 listOf("What", "is", "your", "name", "?"),
                 listOf("WP", "VBZ", "PRP$", "NN", "."))
 
-        //val tokens = listOf("(*)","(often/JT)","(_/VERB)","(*)","(*)","(*)","(*)","(./.)")
+        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(information)["INFORMATION"]))
 
-        val classify = classifier.classify(sentence)
-
-        println(classify)
     }
 
+    @Test
+    fun testImperativeClassification() {
+
+        val imperative = Sentence("Do it now!",
+                listOf("Do", "it", "now", "!"),
+                listOf("VB", "PRP", "RB", "."))
+
+        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(imperative)["IMPERATIVE"]))
+
+    }
+
+    @Test
+    fun testOccasionClassification() {
+
+        val occasion = Sentence("When do the shops open?",
+                listOf("When", "do", "the", "shops", "open", "?"),
+                listOf("WRB", "VBP", "DT", "NNS", "JJ", "."))
+
+        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(occasion)["OCCASION"]))
+
+    }
 }
