@@ -20,15 +20,20 @@ import com.github.bpark.companion.classifier.TextClassifier
 import com.github.bpark.companion.input.Sentence
 import org.hamcrest.Matchers.lessThan
 import org.junit.Assert.assertThat
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TextClassifierTest {
 
     @Test
     fun testClassify() {
-        val classifier = TextClassifier("/classifications/basic-dialogs.model", listOf("greeting", "farewell", "other"))
+        val classifier = TextClassifier("/classifications/topics.model", listOf("greeting", "farewell", "weather", "other"))
 
         assertThat<Double>(0.9, lessThan<Double>(classifier.classify(raw("Hello John"))["greeting"]))
+        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(raw("how will the weather be tomorrow"))["weather"]))
+        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(raw("will it rain today"))["weather"]))
+        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(raw("it's cold outside?"))["weather"]))
+        assertTrue(classifier.mostLikely(classifier.classify(raw("yes")), "other"))
 
     }
 

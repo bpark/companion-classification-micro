@@ -23,4 +23,9 @@ abstract class PhraseClassifier {
     abstract fun classify(sentence: Sentence): Map<String, Double>
 
     abstract fun name(): String
+
+    fun mostLikely(predictions: Map<String, Double>, clazz: String): Boolean {
+        val maximum = predictions.entries.stream().max { e1, e2 -> e1.value.compareTo(e2.value) }.get()
+        return maximum.key == clazz
+    }
 }

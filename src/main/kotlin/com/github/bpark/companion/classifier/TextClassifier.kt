@@ -77,6 +77,8 @@ class TextClassifier(location: String, private val classes: List<String>) : Phra
             distributionMap.put(classValue, distribution)
         }
 
+        logger.info { "distribution: $distributionMap" }
+
         return distributionMap
     }
 }

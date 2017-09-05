@@ -40,7 +40,7 @@ class ClassificationVerticle : AbstractVerticle() {
         private const val NLP_KEY = "nlp"
         private const val CLASSIFICATION_KEY = "classification"
 
-        private val TOPIC_CLASSES = listOf("greeting", "farewell", "other")
+        private val TOPIC_CLASSES = listOf("greeting", "farewell", "weather", "other")
         private val SENTENCE_CLASSES = listOf("IMPERATIVE","DECLARATIVE","PEOPLE","LOCATION","OCCASION","REASON",
                 "INFORMATION","CHOICE","DESCRIPTION","QUANTITY","FREQUENCY","DISTANCE")
 
@@ -56,7 +56,7 @@ class ClassificationVerticle : AbstractVerticle() {
             try {
 
                 val classifiers = listOf(
-                        TextClassifier("/classifications/basic-dialogs.model", TOPIC_CLASSES),
+                        TextClassifier("/classifications/topics.model", TOPIC_CLASSES),
                         SentenceClassifier("/classifications/sentences.model", SENTENCE_CLASSES)
                 )
 
