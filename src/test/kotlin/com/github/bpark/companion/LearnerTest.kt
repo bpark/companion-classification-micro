@@ -67,5 +67,25 @@ class LearnerTest {
 
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun testTenseLearn() {
+        val learner = TextClassifierLearner()
+        val instances = learner.loadDataset("src/test/resources/tenses.arff")
+        val classifier = learner.learn(instances)
+        learner.evaluate(classifier, instances)
+
+        SerializationHelper.write("target/classes/tenses.model", classifier)
+
+        val textClassifier = TextClassifier("/tenses.model", listOf("simplePresent", "presentProgressive",
+                "simplePast", "pastProgressive", "simplePresentPerfect", "presentPerfectProgressive",
+                "simplePastPerfect", "pastPerfectProgressive", "willFuture", "goingToFuture", "simpleFuturePerfect",
+                "futurePerfectProgressive", "conditionalSimple", "conditionalProgressive",
+                "conditionalPerfect", "conditionalPerfectProgressive"))
+
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("VBP(0)"))["simplePresent"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("MD(will,0) VB"))["willFuture"]))
+    }
+
     private fun raw(raw: String) = Sentence(raw, emptyList(), emptyList())
 }
