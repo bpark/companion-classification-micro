@@ -27,7 +27,7 @@
 
     <properties>
         <weka.version>3.8.1</weka.version>
-        <vertx.version>3.4.1</vertx.version>
+        <vertx.version>3.4.2</vertx.version>
         <slf4j.jdk14.version>1.7.25</slf4j.jdk14.version>
         <kotlin.version>1.1.50</kotlin.version>
         <kotlin.logging.version>1.4.6</kotlin.logging.version>
@@ -111,6 +111,32 @@
 
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>docker-build</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>1.3.6</version>
+                        <executions>
+                            <execution>
+                                <id>default</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <repository>${project.artifactId}</repository>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencyManagement>
         <dependencies>

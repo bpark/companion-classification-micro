@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:9-jre-slim
 
 ENV JAVA_APP_JAR companion-classification-micro-1.0-SNAPSHOT-fat.jar
 
