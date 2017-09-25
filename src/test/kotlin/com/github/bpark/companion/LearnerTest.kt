@@ -25,8 +25,17 @@ import org.junit.Assert.assertThat
 import org.junit.Test
 import weka.core.SerializationHelper
 
+/**
+ * Test for different learner implementations.
+ *
+ * Each test reads an .arff file and produces a trained model. This model is used for classification and can be used
+ * for the different classification implementations.
+ */
 class LearnerTest {
 
+    /**
+     * Test for the sentence type (imperative, declarative, people questions, etc.)
+     */
     @Test
     @Throws(Exception::class)
     fun testLearner() {
@@ -38,6 +47,9 @@ class LearnerTest {
         SerializationHelper.write("target/classes/sentences.model", classifier)
     }
 
+    /**
+     * Test for topic type, ex, if a phrase is a greeting or farewell.
+     */
     @Test
     @Throws(Exception::class)
     fun testLearn() {
@@ -67,6 +79,9 @@ class LearnerTest {
 
     }
 
+    /**
+     * Test for tense detection.
+     */
     @Test
     @Throws(Exception::class)
     fun testTenseLearn() {
