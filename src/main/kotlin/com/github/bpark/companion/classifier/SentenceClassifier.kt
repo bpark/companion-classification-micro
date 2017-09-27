@@ -22,8 +22,19 @@ import weka.classifiers.trees.J48
 import weka.core.*
 import java.util.*
 
+/**
+ * Classifier implementation to predict the sentence type (imperative, declarative, question type, etc).
+ *
+ * The sentence is reduced to a defined ordered set of attributes to create an instance for classification.
+ *
+ * @param location the location of the classifier model file.
+ * @param classes all possible classes.
+ */
 class SentenceClassifier(location: String, private val classes: List<String>) : PhraseClassifier() {
 
+    /**
+     * set of attribute constants for the classifier.
+     */
     companion object {
         private const val ATTR_CLASS = "type"
         private const val ATTR_START = "start"

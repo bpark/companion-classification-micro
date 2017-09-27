@@ -18,12 +18,28 @@ package com.github.bpark.companion.classifier
 
 import com.github.bpark.companion.input.Sentence
 
+/**
+ * Abstract super class implementation for all classifiers.
+ */
 abstract class PhraseClassifier {
 
     abstract fun classify(sentence: Sentence): Map<String, Double>
 
+    /**
+     * Name to define the classification result name.
+     *
+     * @return the name of the classifier used for the result name.
+     */
     abstract fun name(): String
 
+    /**
+     * Helper function to match a specific class with all predictions and returns true if the top result
+     * matches the class.
+     *
+     * @param predictions all predictions.
+     * @param clazz the specific classification value to match.
+     * @return true if predictions[clazz] has the highest value.
+     */
     fun mostLikely(predictions: Map<String, Double>, clazz: String): Boolean {
         val maximum = predictions.entries.stream().max { e1, e2 -> e1.value.compareTo(e2.value) }.get()
         return maximum.key == clazz

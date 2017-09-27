@@ -20,10 +20,13 @@ import com.github.bpark.companion.input.Sentence
 import mu.KotlinLogging
 
 /**
- * @author bpark
+ * Short alias for analyzed token.
  */
 typealias AnalyzedToken = Pair<String, String>
 
+/**
+ * Set of constants, fixed tags and predefined tokens.
+ */
 private object TokenConstants {
 
     const val VTAG = "VERB"
@@ -43,6 +46,9 @@ private object TokenConstants {
     val ANALYZER_TAGS = listOf(WHTAG, VTAG, JTAG, ITAG)
 }
 
+/**
+ * Interface for all transformer steps. Each transformer step processes a list of analyzed tokens.
+ */
 private interface SentenceTransformer {
 
     fun transform(analyzedTokens: List<AnalyzedToken>): List<AnalyzedToken>
@@ -53,16 +59,28 @@ private interface SentenceTransformer {
 
 }
 
+/**
+ * Transformer to remove all irrelevant tokens for further processing, only verbs and a set of specific tokens are
+ * kept.
+ */
 private object RelevantTokenTransformer : SentenceTransformer {
 
     val jTypes = listOf("much", "often", "many", "far")
 
+    /**
+     * Removes all irrelevant tokens from the list.
+     */
     override fun transform(analyzedTokens: List<AnalyzedToken>): List<AnalyzedToken> {
-        val filteredTokens = analyzedTokens.map { if (startsWith(it.second, TokenConstants.ANALYZER_TAGS)) it else TokenConstants.ANY }.toMutableList()
+        val filteredTokens = analyzedTokens.map {
+            if (startsWith(it.second, TokenConstants.ANALYZER_TAGS))
+                it
+            else
+                TokenConstants.ANY
+        }.toMutableList()
         filteredTokens.forEachIndexed { index, (first, second) ->
             run {
                 if (second == TokenConstants.VTAG) filteredTokens[index] = TokenConstants.VERB
-                if (second == TokenConstants.JTAG && !jTypes.contains(first) ) filteredTokens[index] = TokenConstants.ANY
+                if (second == TokenConstants.JTAG && !jTypes.contains(first)) filteredTokens[index] = TokenConstants.ANY
             }
         }
         return filteredTokens
@@ -70,6 +88,9 @@ private object RelevantTokenTransformer : SentenceTransformer {
 
 }
 
+/**
+ * Removes all duplicated tokens.
+ */
 private object DuplicateTokenTransformer : SentenceTransformer {
 
     override fun transform(analyzedTokens: List<AnalyzedToken>): List<AnalyzedToken> {
@@ -93,6 +114,9 @@ private object DuplicateTokenTransformer : SentenceTransformer {
 
 }
 
+/**
+ * Defines the start token, relevant if a phrase starts with a WH-Token or a verb.
+ */
 private object StartTokenTransformer : SentenceTransformer {
 
     override fun transform(analyzedTokens: List<AnalyzedToken>): List<AnalyzedToken> {
@@ -111,6 +135,9 @@ private object StartTokenTransformer : SentenceTransformer {
 
 }
 
+/**
+ * Fills the remaining set of tokens with ANY Tokens (*) until a defined size of the set.
+ */
 private object FillTokenTransformer : SentenceTransformer {
 
     override fun transform(analyzedTokens: List<AnalyzedToken>): List<AnalyzedToken> {
@@ -125,6 +152,9 @@ private object FillTokenTransformer : SentenceTransformer {
 
 }
 
+/**
+ * Defines the End-Token (.!?).
+ */
 private object EndTokenTransformer : SentenceTransformer {
 
     override fun transform(analyzedTokens: List<AnalyzedToken>): List<AnalyzedToken> {
@@ -147,7 +177,10 @@ private object EndTokenTransformer : SentenceTransformer {
 
 }
 
-
+/**
+ * Transforms a given sentence into a fixed-length sequence of defined tokens. This token sequence is used to
+ * build an instance for classification.
+ */
 object SentenceFeatureTransformer {
 
     private val logger = KotlinLogging.logger {}
@@ -159,7 +192,7 @@ object SentenceFeatureTransformer {
         val tokens = sentence.tokens
         val tags = sentence.posTags
 
-        val transformers = listOf<SentenceTransformer>(RelevantTokenTransformer,
+        val transformers = listOf(RelevantTokenTransformer,
                 DuplicateTokenTransformer,
                 StartTokenTransformer,
                 FillTokenTransformer,
