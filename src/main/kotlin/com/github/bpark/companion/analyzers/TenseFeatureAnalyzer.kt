@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.bpark.companion.classifier
+package com.github.bpark.companion.analyzers
 
 import com.github.bpark.companion.input.Sentence
 import mu.KotlinLogging
@@ -56,9 +56,9 @@ object TenseFeatureTransformer {
 
     private fun buildWordInfo(sentence: Sentence): List<WordInfo> {
 
-        val tags = sentence.nlpSentence.posTags
-        val tokens = sentence.nlpSentence.tokens.map { removeContractions(it.toLowerCase()) }
-        val words = sentence.wordnetSentence.analyzedWords;
+        val tags = sentence.nlp.posTags
+        val tokens = sentence.nlp.tokens.map { removeContractions(it.toLowerCase()) }
+        val words = sentence.wordnet.analyzedWords;
 
         return tokens.mapIndexed { index, token -> WordInfo(token, tags[index], words[index].lemma) }
     }

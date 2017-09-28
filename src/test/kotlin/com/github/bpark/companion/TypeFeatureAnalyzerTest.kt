@@ -17,7 +17,7 @@
 package com.github.bpark.companion
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.github.bpark.companion.classifier.SentenceFeatureTransformer
+import com.github.bpark.companion.analyzers.SentenceTypeFeatureTransformer
 import com.github.bpark.companion.input.AnalyzedText
 import com.github.bpark.companion.input.Sentence
 import com.github.bpark.companion.input.WordnetSentence
@@ -28,7 +28,7 @@ import org.junit.Test
 import java.nio.charset.StandardCharsets
 
 
-class SentenceFeatureAnalyzerTest {
+class TypeFeatureAnalyzerTest {
 
     @Test
     fun testSize() {
@@ -40,7 +40,7 @@ class SentenceFeatureAnalyzerTest {
         val analyzedText = Json.decodeValue(content, AnalyzedText::class.java)
 
         analyzedText.sentences.forEach {
-            val transform = SentenceFeatureTransformer.transform(Sentence(it, WordnetSentence(emptyList())))
+            val transform = SentenceTypeFeatureTransformer.transform(Sentence(it, WordnetSentence(emptyList())))
             Assert.assertEquals(transform.joinToString(" "), 8, transform.size)
 
             val raw = it.raw

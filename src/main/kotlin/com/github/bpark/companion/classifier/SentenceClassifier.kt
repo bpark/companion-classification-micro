@@ -16,6 +16,7 @@
 
 package com.github.bpark.companion.classifier
 
+import com.github.bpark.companion.analyzers.SentenceTypeFeatureTransformer
 import com.github.bpark.companion.input.Sentence
 import mu.KotlinLogging
 import weka.classifiers.trees.J48
@@ -58,7 +59,7 @@ class SentenceClassifier(location: String, private val classes: List<String>) : 
 
     override fun classify(sentence: Sentence): Map<String, Double> {
 
-        val transformed = SentenceFeatureTransformer.transform(sentence)
+        val transformed = SentenceTypeFeatureTransformer.transform(sentence)
 
         logger.info { "transformed: $transformed" }
 

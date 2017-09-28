@@ -39,7 +39,7 @@ class TextClassifier(location: String, private val classes: List<String>) : Phra
 
     override fun classify(sentence: Sentence): Map<String, Double> {
 
-        val text = sentence.nlpSentence.raw
+        val text = sentence.nlp.raw
 
         val instances = buildInstances(text)
         return classify(instances)

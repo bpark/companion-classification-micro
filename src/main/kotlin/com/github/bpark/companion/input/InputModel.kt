@@ -18,24 +18,44 @@ package com.github.bpark.companion.input
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
+/**
+ * Data class to hold all nlp results.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class NlpSentence(val raw: String, val tokens: List<String>, val posTags: List<String>)
 
-
+/**
+ * Data class to hold all nlp processed sentences.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class AnalyzedText(val sentences: List<NlpSentence>)
 
+/**
+ * Data class with all required wordnet results for a single word.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class AnalyzedWord(val stem: String, val lemma: String)
+data class AnalyzedWord(val lemma: String)
 
+/**
+ * Data class with all analyzed words of a single sentence.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class WordnetSentence(val analyzedWords: List<AnalyzedWord>)
 
+/**
+ * Data class with all wordnet analyzed sentences.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class WordnetAnalysis(val wordnetSentences: List<WordnetSentence>)
 
-data class Sentence(val nlpSentence: NlpSentence, val wordnetSentence: WordnetSentence)
+/**
+ * Helper class to aggregate an nlp and a wordnet sentence.
+ */
+data class Sentence(val nlp: NlpSentence, val wordnet: WordnetSentence)
 
+/**
+ * Helper class to aggregate the whole nlp and wordnet analyzed text.
+ */
 data class AnalyzedInputText(val analyzedText: AnalyzedText, val wordnetAnalysis: WordnetAnalysis) {
 
     fun getSentences(): List<Sentence> {
