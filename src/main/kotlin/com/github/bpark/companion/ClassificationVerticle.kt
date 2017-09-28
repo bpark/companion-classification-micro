@@ -20,11 +20,14 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.github.bpark.companion.classifier.PhraseClassifier
 import com.github.bpark.companion.classifier.SentenceClassifier
 import com.github.bpark.companion.classifier.TextClassifier
+import com.github.bpark.companion.input.AnalyzedInputText
 import com.github.bpark.companion.input.AnalyzedText
+import com.github.bpark.companion.input.WordnetAnalysis
 import com.github.bpark.companion.output.ClassificationResult
 import com.github.bpark.companion.output.PredictedSentence
 import io.vertx.core.json.Json
 import io.vertx.rxjava.core.AbstractVerticle
+import io.vertx.rxjava.core.shareddata.AsyncMap
 import mu.KotlinLogging
 import rx.Observable
 import rx.Single
@@ -38,6 +41,7 @@ class ClassificationVerticle : AbstractVerticle() {
         private const val ADDRESS = "classification.BASIC"
 
         private const val NLP_KEY = "nlp"
+        private const val WORDNET_KEY = "wordnet"
         private const val CLASSIFICATION_KEY = "classification"
 
         private val TOPIC_CLASSES = listOf("greeting", "farewell", "weather", "other")
@@ -82,7 +86,9 @@ class ClassificationVerticle : AbstractVerticle() {
         observable.subscribe { message ->
             val id = message.body()
 
-            readMessage(id).flatMap { (sentences) ->
+            readMessage(id).flatMap { analyzedInputText ->
+
+                val sentences = analyzedInputText.getSentences()
 
                 val classifications = sentences.stream().map { sentence ->
 
@@ -100,10 +106,27 @@ class ClassificationVerticle : AbstractVerticle() {
         }
     }
 
-    private fun readMessage(id: String): Observable<AnalyzedText> {
-        return vertx.sharedData().rxGetClusterWideMap<String, String>(id)
-                .flatMap { map -> map.rxGet(NLP_KEY) }
+    private fun readMessage(id: String): Observable<AnalyzedInputText> {
+
+        val clusterMap = vertx.sharedData().rxGetClusterWideMap<String, String>(id)
+
+        return clusterMap.flatMap { map ->
+            Observable.zip(extractNlp(map), extractWordnet(map)) { nlp, wordnet ->
+                AnalyzedInputText(nlp, wordnet)
+            }.toSingle()
+        }.toObservable()
+
+    }
+
+    private fun extractNlp(map: AsyncMap<String, String>): Observable<AnalyzedText> {
+        return map.rxGet(NLP_KEY)
                 .flatMap { content -> Single.just(Json.decodeValue(content, AnalyzedText::class.java)) }
+                .toObservable()
+    }
+
+    private fun extractWordnet(map: AsyncMap<String, String>): Observable<WordnetAnalysis> {
+        return map.rxGet(WORDNET_KEY)
+                .flatMap { content -> Single.just<WordnetAnalysis>(Json.decodeValue<WordnetAnalysis>(content, WordnetAnalysis::class.java)) }
                 .toObservable()
     }
 

@@ -17,7 +17,9 @@
 package com.github.bpark.companion
 
 import com.github.bpark.companion.classifier.TextClassifier
+import com.github.bpark.companion.input.NlpSentence
 import com.github.bpark.companion.input.Sentence
+import com.github.bpark.companion.input.WordnetSentence
 import com.github.bpark.companion.learn.SentenceTypeLearner
 import com.github.bpark.companion.learn.TextClassifierLearner
 import org.hamcrest.Matchers.lessThan
@@ -102,5 +104,5 @@ class LearnerTest {
         assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("MD(will,0) VB"))["willFuture"]))
     }
 
-    private fun raw(raw: String) = Sentence(raw, emptyList(), emptyList())
+    private fun raw(raw: String) = Sentence(NlpSentence(raw, emptyList(), emptyList()), WordnetSentence(emptyList()))
 }

@@ -17,7 +17,9 @@
 package com.github.bpark.companion
 
 import com.github.bpark.companion.classifier.SentenceClassifier
+import com.github.bpark.companion.input.NlpSentence
 import com.github.bpark.companion.input.Sentence
+import com.github.bpark.companion.input.WordnetSentence
 import org.hamcrest.Matchers.lessThan
 import org.junit.Assert.assertThat
 import org.junit.Before
@@ -37,9 +39,9 @@ class SentenceClassifierTest {
     @Test
     fun testInformationClassification() {
 
-        val information = Sentence("What is your name?",
+        val information = Sentence(NlpSentence("What is your name?",
                 listOf("What", "is", "your", "name", "?"),
-                listOf("WP", "VBZ", "PRP$", "NN", "."))
+                listOf("WP", "VBZ", "PRP$", "NN", ".")), WordnetSentence(emptyList()))
 
         assertThat<Double>(0.9, lessThan<Double>(classifier.classify(information)["INFORMATION"]))
 
@@ -48,9 +50,9 @@ class SentenceClassifierTest {
     @Test
     fun testImperativeClassification() {
 
-        val imperative = Sentence("Do it now!",
+        val imperative = Sentence(NlpSentence("Do it now!",
                 listOf("Do", "it", "now", "!"),
-                listOf("VB", "PRP", "RB", "."))
+                listOf("VB", "PRP", "RB", ".")), WordnetSentence(emptyList()))
 
         assertThat<Double>(0.9, lessThan<Double>(classifier.classify(imperative)["IMPERATIVE"]))
 
@@ -59,9 +61,9 @@ class SentenceClassifierTest {
     @Test
     fun testOccasionClassification() {
 
-        val occasion = Sentence("When do the shops open?",
+        val occasion = Sentence(NlpSentence("When do the shops open?",
                 listOf("When", "do", "the", "shops", "open", "?"),
-                listOf("WRB", "VBP", "DT", "NNS", "JJ", "."))
+                listOf("WRB", "VBP", "DT", "NNS", "JJ", ".")), WordnetSentence(emptyList()))
 
         assertThat<Double>(0.9, lessThan<Double>(classifier.classify(occasion)["OCCASION"]))
 

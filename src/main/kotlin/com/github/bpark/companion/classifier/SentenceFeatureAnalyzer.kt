@@ -189,8 +189,8 @@ object SentenceFeatureTransformer {
 
         logger.info { "analyzing sentence $sentence" }
 
-        val tokens = sentence.tokens
-        val tags = sentence.posTags
+        val tokens = sentence.nlpSentence.tokens
+        val tags = sentence.nlpSentence.posTags
 
         val transformers = listOf(RelevantTokenTransformer,
                 DuplicateTokenTransformer,

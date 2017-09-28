@@ -19,6 +19,8 @@ package com.github.bpark.companion
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.github.bpark.companion.classifier.SentenceFeatureTransformer
 import com.github.bpark.companion.input.AnalyzedText
+import com.github.bpark.companion.input.Sentence
+import com.github.bpark.companion.input.WordnetSentence
 import io.vertx.core.json.Json
 import org.apache.commons.io.IOUtils
 import org.junit.Assert
@@ -38,7 +40,7 @@ class SentenceFeatureAnalyzerTest {
         val analyzedText = Json.decodeValue(content, AnalyzedText::class.java)
 
         analyzedText.sentences.forEach {
-            val transform = SentenceFeatureTransformer.transform(it)
+            val transform = SentenceFeatureTransformer.transform(Sentence(it, WordnetSentence(emptyList())))
             Assert.assertEquals(transform.joinToString(" "), 8, transform.size)
 
             val raw = it.raw

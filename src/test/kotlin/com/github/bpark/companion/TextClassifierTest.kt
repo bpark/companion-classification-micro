@@ -17,7 +17,9 @@
 package com.github.bpark.companion
 
 import com.github.bpark.companion.classifier.TextClassifier
+import com.github.bpark.companion.input.NlpSentence
 import com.github.bpark.companion.input.Sentence
+import com.github.bpark.companion.input.WordnetSentence
 import org.hamcrest.Matchers.lessThan
 import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
@@ -37,5 +39,5 @@ class TextClassifierTest {
 
     }
 
-    private fun raw(raw: String) = Sentence(raw, emptyList(), emptyList())
+    private fun raw(raw: String) = Sentence(NlpSentence(raw, emptyList(), emptyList()), WordnetSentence(emptyList()))
 }

@@ -18,9 +18,27 @@ package com.github.bpark.companion.input
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class NlpSentence(val raw: String, val tokens: List<String>, val posTags: List<String>)
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class AnalyzedText(val sentences: List<Sentence>)
+data class AnalyzedText(val sentences: List<NlpSentence>)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class Sentence(val raw: String, val tokens: List<String>, val posTags: List<String>)
+data class AnalyzedWord(val stem: String, val lemma: String)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class WordnetSentence(val analyzedWords: List<AnalyzedWord>)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class WordnetAnalysis(val wordnetSentences: List<WordnetSentence>)
+
+data class Sentence(val nlpSentence: NlpSentence, val wordnetSentence: WordnetSentence)
+
+data class AnalyzedInputText(val analyzedText: AnalyzedText, val wordnetAnalysis: WordnetAnalysis) {
+
+    fun getSentences(): List<Sentence> {
+        return analyzedText.sentences.mapIndexed { index, sentence ->  Sentence(sentence, wordnetAnalysis.wordnetSentences[index])}
+    }
+}
