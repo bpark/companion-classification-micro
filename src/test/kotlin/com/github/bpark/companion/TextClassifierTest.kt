@@ -16,6 +16,7 @@
 
 package com.github.bpark.companion
 
+import com.github.bpark.companion.analyzers.RawFeatureAnalyzer
 import com.github.bpark.companion.classifier.TextClassifier
 import com.github.bpark.companion.input.NlpSentence
 import com.github.bpark.companion.input.Sentence
@@ -39,5 +40,5 @@ class TextClassifierTest {
 
     }
 
-    private fun raw(raw: String) = Sentence(NlpSentence(raw, emptyList(), emptyList()), WordnetSentence(emptyList()))
+    private fun raw(raw: String) = RawFeatureAnalyzer.transform(Sentence(NlpSentence(raw, emptyList(), emptyList()), WordnetSentence(emptyList())))
 }

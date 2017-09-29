@@ -16,6 +16,7 @@
 
 package com.github.bpark.companion
 
+import com.github.bpark.companion.analyzers.SentenceTypeFeatureTransformer
 import com.github.bpark.companion.classifier.SentenceClassifier
 import com.github.bpark.companion.input.NlpSentence
 import com.github.bpark.companion.input.Sentence
@@ -43,7 +44,9 @@ class SentenceClassifierTest {
                 listOf("What", "is", "your", "name", "?"),
                 listOf("WP", "VBZ", "PRP$", "NN", ".")), WordnetSentence(emptyList()))
 
-        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(information)["INFORMATION"]))
+        val attributes = SentenceTypeFeatureTransformer.transform(information)
+
+        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(attributes)["INFORMATION"]))
 
     }
 
@@ -54,7 +57,9 @@ class SentenceClassifierTest {
                 listOf("Do", "it", "now", "!"),
                 listOf("VB", "PRP", "RB", ".")), WordnetSentence(emptyList()))
 
-        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(imperative)["IMPERATIVE"]))
+        val attributes = SentenceTypeFeatureTransformer.transform(imperative)
+
+        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(attributes)["IMPERATIVE"]))
 
     }
 
@@ -65,7 +70,9 @@ class SentenceClassifierTest {
                 listOf("When", "do", "the", "shops", "open", "?"),
                 listOf("WRB", "VBP", "DT", "NNS", "JJ", ".")), WordnetSentence(emptyList()))
 
-        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(occasion)["OCCASION"]))
+        val attributes = SentenceTypeFeatureTransformer.transform(occasion)
+
+        assertThat<Double>(0.9, lessThan<Double>(classifier.classify(attributes)["OCCASION"]))
 
     }
 }

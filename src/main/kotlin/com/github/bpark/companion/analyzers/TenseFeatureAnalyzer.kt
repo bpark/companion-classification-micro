@@ -35,12 +35,12 @@ private data class WordInfo(val token: String, val tag: String, val lemma: Strin
     }
 }
 
-object TenseFeatureTransformer {
+object TenseFeatureTransformer : FeatureAnalyzer {
 
     private val logger = KotlinLogging.logger {}
 
-    fun transform(sentence: Sentence): List<String> {
-        return buildBag(buildWordInfo(sentence))
+    override fun transform(sentence: Sentence): List<String> {
+        return listOf(buildBag(buildWordInfo(sentence)).joinToString(" "))
     }
 
     private fun buildBag(wordinfos: List<WordInfo>): List<String> {
@@ -60,7 +60,7 @@ object TenseFeatureTransformer {
         val tokens = sentence.nlp.tokens.map { removeContractions(it.toLowerCase()) }
         val words = sentence.wordnet.analyzedWords;
 
-        return tokens.mapIndexed { index, token -> WordInfo(token, tags[index], words[index].lemma) }
+        return tokens.mapIndexed { index, token -> WordInfo(token, tags[index], words[index]?.lemma) }
     }
 
     private fun removeContractions(inputString: String): String {

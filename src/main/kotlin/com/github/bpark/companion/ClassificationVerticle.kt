@@ -17,7 +17,9 @@
 package com.github.bpark.companion
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.github.bpark.companion.classifier.PhraseClassifier
+import com.github.bpark.companion.analyzers.RawFeatureAnalyzer
+import com.github.bpark.companion.analyzers.SentenceTypeFeatureTransformer
+import com.github.bpark.companion.analyzers.TenseFeatureTransformer
 import com.github.bpark.companion.classifier.SentenceClassifier
 import com.github.bpark.companion.classifier.TextClassifier
 import com.github.bpark.companion.input.AnalyzedInputText
@@ -47,6 +49,11 @@ class ClassificationVerticle : AbstractVerticle() {
         private val TOPIC_CLASSES = listOf("greeting", "farewell", "weather", "other")
         private val SENTENCE_CLASSES = listOf("IMPERATIVE","DECLARATIVE","PEOPLE","LOCATION","OCCASION","REASON",
                 "INFORMATION","CHOICE","DESCRIPTION","QUANTITY","FREQUENCY","DISTANCE")
+        private val TENSE_CLASSES = listOf("simplePresent", "presentProgressive",
+                "simplePast", "pastProgressive", "simplePresentPerfect", "presentPerfectProgressive",
+                "simplePastPerfect", "pastPerfectProgressive", "willFuture", "goingToFuture", "simpleFuturePerfect",
+                "futurePerfectProgressive", "conditionalSimple", "conditionalProgressive",
+                "conditionalPerfect", "conditionalPerfectProgressive", "nothing")
 
     }
 
@@ -55,13 +62,14 @@ class ClassificationVerticle : AbstractVerticle() {
 
         Json.mapper.registerModule(KotlinModule())
 
-        vertx.rxExecuteBlocking<List<PhraseClassifier>> { future ->
+        vertx.rxExecuteBlocking<List<ClassificationConfiguration>> { future ->
 
             try {
 
                 val classifiers = listOf(
-                        TextClassifier("/classifications/topics.model", TOPIC_CLASSES),
-                        SentenceClassifier("/classifications/sentences.model", SENTENCE_CLASSES)
+                        ClassificationConfiguration("topics", RawFeatureAnalyzer, TextClassifier("/classifications/topics.model", TOPIC_CLASSES)),
+                        ClassificationConfiguration("phraseTypes", SentenceTypeFeatureTransformer, SentenceClassifier("/classifications/sentences.model", SENTENCE_CLASSES)),
+                        ClassificationConfiguration("tenses", TenseFeatureTransformer, TextClassifier("/classifications/tenses.model", TENSE_CLASSES))
                 )
 
                 future.complete(classifiers)
@@ -77,7 +85,7 @@ class ClassificationVerticle : AbstractVerticle() {
 
     }
 
-    private fun registerAnalyzer(classifier: List<PhraseClassifier>) {
+    private fun registerAnalyzer(classifier: List<ClassificationConfiguration>) {
         val eventBus = vertx.eventBus()
 
         val consumer = eventBus.consumer<String>(ADDRESS)
@@ -94,7 +102,7 @@ class ClassificationVerticle : AbstractVerticle() {
 
                     logger.info { "received sentence: $sentence" }
 
-                    val classifications = classifier.associateBy({it.name()}, {it.classify(sentence)})
+                    val classifications = classifier.associateBy({it.name}, {it.phraseClassifier.classify(it.featureAnalyzer.transform(sentence))})
 
                     logger.info { "evaluated classification: $classifications" }
 

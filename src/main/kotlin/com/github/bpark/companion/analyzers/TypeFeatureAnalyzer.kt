@@ -181,11 +181,11 @@ private object EndTokenTransformer : SentenceTransformer {
  * Transforms a given sentence into a fixed-length sequence of defined tokens. This token sequence is used to
  * build an instance for classification.
  */
-object SentenceTypeFeatureTransformer {
+object SentenceTypeFeatureTransformer : FeatureAnalyzer {
 
     private val logger = KotlinLogging.logger {}
 
-    fun transform(sentence: Sentence): List<String> {
+    override fun transform(sentence: Sentence): List<String> {
 
         logger.info { "analyzing sentence $sentence" }
 

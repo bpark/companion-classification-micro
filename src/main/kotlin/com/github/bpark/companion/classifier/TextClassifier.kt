@@ -16,7 +16,6 @@
 
 package com.github.bpark.companion.classifier
 
-import com.github.bpark.companion.input.Sentence
 import mu.KotlinLogging
 import weka.classifiers.meta.FilteredClassifier
 import weka.core.Attribute
@@ -37,15 +36,11 @@ class TextClassifier(location: String, private val classes: List<String>) : Phra
     private var classifier = SerializationHelper.read(this.javaClass.getResourceAsStream(location)) as FilteredClassifier
 
 
-    override fun classify(sentence: Sentence): Map<String, Double> {
+    override fun classify(attributes: List<String>): Map<String, Double> {
 
-        val text = sentence.nlp.raw
-
-        val instances = buildInstances(text)
+        val instances = buildInstances(attributes.first())
         return classify(instances)
     }
-
-    override fun name(): String = "topic"
 
     private fun buildInstances(text: String): Instances {
 

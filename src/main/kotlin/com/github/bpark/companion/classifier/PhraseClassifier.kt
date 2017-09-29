@@ -16,21 +16,12 @@
 
 package com.github.bpark.companion.classifier
 
-import com.github.bpark.companion.input.Sentence
-
 /**
  * Abstract super class implementation for all classifiers.
  */
 abstract class PhraseClassifier {
 
-    abstract fun classify(sentence: Sentence): Map<String, Double>
-
-    /**
-     * Name to define the classification result name.
-     *
-     * @return the name of the classifier used for the result name.
-     */
-    abstract fun name(): String
+    abstract fun classify(attributes: List<String>): Map<String, Double>
 
     /**
      * Helper function to match a specific class with all predictions and returns true if the top result

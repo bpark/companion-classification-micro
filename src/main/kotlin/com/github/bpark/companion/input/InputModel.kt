@@ -40,7 +40,7 @@ data class AnalyzedWord(val lemma: String?)
  * Data class with all analyzed words of a single sentence.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class WordnetSentence(val analyzedWords: List<AnalyzedWord>)
+data class WordnetSentence(val analyzedWords: List<AnalyzedWord?>)
 
 /**
  * Data class with all wordnet analyzed sentences.
