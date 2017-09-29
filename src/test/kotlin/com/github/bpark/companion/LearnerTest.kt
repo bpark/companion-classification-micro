@@ -98,10 +98,11 @@ class LearnerTest {
                 "simplePast", "pastProgressive", "simplePresentPerfect", "presentPerfectProgressive",
                 "simplePastPerfect", "pastPerfectProgressive", "willFuture", "goingToFuture", "simpleFuturePerfect",
                 "futurePerfectProgressive", "conditionalSimple", "conditionalProgressive",
-                "conditionalPerfect", "conditionalPerfectProgressive"))
+                "conditionalPerfect", "conditionalPerfectProgressive", "nothing"))
 
         assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("VBP(0)"))["simplePresent"]))
         assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw("MD(will,0) VB"))["willFuture"]))
+        assertThat<Double>(0.9, lessThan<Double>(textClassifier.classify(raw(""))["nothing"]))
     }
 
     private fun raw(raw: String) = Sentence(NlpSentence(raw, emptyList(), emptyList()), WordnetSentence(emptyList()))

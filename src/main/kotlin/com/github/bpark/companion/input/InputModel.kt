@@ -34,7 +34,7 @@ data class AnalyzedText(val sentences: List<NlpSentence>)
  * Data class with all required wordnet results for a single word.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class AnalyzedWord(val lemma: String)
+data class AnalyzedWord(val lemma: String?)
 
 /**
  * Data class with all analyzed words of a single sentence.
