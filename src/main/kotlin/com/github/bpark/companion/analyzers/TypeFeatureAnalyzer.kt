@@ -32,16 +32,16 @@ private object TokenConstants {
     const val VTAG = "VERB"
     const val JTAG = "JT"
     const val WHTAG = "WHQ"
-    const val ITAG = ""
+    const val ITAG = "."
     const val QTAG = "?"
     const val ETAG = "!"
 
     val ANY = AnalyzedToken("", "*")
     val VERB = AnalyzedToken("_", VTAG)
     val START = AnalyzedToken("", "^")
-    val QM = AnalyzedToken("QM", "")
-    val EM = AnalyzedToken("EM", "")
-    val DT = AnalyzedToken("DT", "")
+    val QM = AnalyzedToken("QM", ".")
+    val EM = AnalyzedToken("EM", ".")
+    val DT = AnalyzedToken("DT", ".")
 
     val ANALYZER_TAGS = listOf(WHTAG, VTAG, JTAG, ITAG)
 }
@@ -226,8 +226,8 @@ object SentenceTypeFeatureTransformer {
             tokenTags.add(Pair(token.toLowerCase(), tag))
         }
 
-        if (tags.last() != "") {
-            tokenTags.add(AnalyzedToken("", ""))
+        if (tags.last() != ".") {
+            tokenTags.add(AnalyzedToken(".", "."))
         }
 
         return tokenTags
