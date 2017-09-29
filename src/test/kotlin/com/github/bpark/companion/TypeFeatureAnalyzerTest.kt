@@ -36,18 +36,28 @@ class TypeFeatureAnalyzerTest {
         Json.mapper.registerModule(KotlinModule())
 
         val content = IOUtils.toString(this.javaClass.getResourceAsStream("/test-sentences.json"), StandardCharsets.UTF_8)
-
         val analyzedText = Json.decodeValue(content, AnalyzedText::class.java)
+
+        val expectedContent = IOUtils.toString(this.javaClass.getResourceAsStream("/expected-sentences.json"), StandardCharsets.UTF_8)
+        val expectedList = Json.decodeValue(expectedContent, ExpectedList::class.java)
+
+        val expectedMap = expectedList.expectedList.associate { Pair(it.raw, it.expected) }
 
         analyzedText.sentences.forEach {
             val transform = SentenceTypeFeatureTransformer.transform(Sentence(it, WordnetSentence(emptyList())))
-            Assert.assertEquals(transform.joinToString(" "), 8, transform.size)
+            val transformedValue = transform.joinToString(", ")
+            Assert.assertEquals(transformedValue, 8, transform.size)
 
             val raw = it.raw
 
-            println(raw)
-            println("$transform")
+            Assert.assertEquals(raw, expectedMap[raw], transformedValue)
+
         }
 
     }
+
 }
+
+private data class ExpectedList(val expectedList: List<ExpectedEntry>)
+
+private data class ExpectedEntry(val raw: String, val expected: String)
