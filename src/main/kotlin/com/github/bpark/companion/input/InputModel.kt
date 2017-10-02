@@ -46,7 +46,7 @@ data class WordnetSentence(val analyzedWords: List<AnalyzedWord?>)
  * Data class with all wordnet analyzed sentences.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class WordnetAnalysis(val wordnetSentences: List<WordnetSentence>)
+data class WordnetAnalysis(val sentences: List<WordnetSentence>)
 
 /**
  * Helper class to aggregate an nlp and a wordnet sentence.
@@ -59,6 +59,6 @@ data class Sentence(val nlp: NlpSentence, val wordnet: WordnetSentence)
 data class AnalyzedInputText(val analyzedText: AnalyzedText, val wordnetAnalysis: WordnetAnalysis) {
 
     fun getSentences(): List<Sentence> {
-        return analyzedText.sentences.mapIndexed { index, sentence ->  Sentence(sentence, wordnetAnalysis.wordnetSentences[index])}
+        return analyzedText.sentences.mapIndexed { index, sentence ->  Sentence(sentence, wordnetAnalysis.sentences[index])}
     }
 }
