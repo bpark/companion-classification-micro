@@ -27,9 +27,9 @@
 
     <properties>
         <weka.version>3.8.1</weka.version>
-        <vertx.version>3.4.1</vertx.version>
+        <vertx.version>3.5.0</vertx.version>
         <slf4j.jdk14.version>1.7.25</slf4j.jdk14.version>
-        <kotlin.version>1.1.50</kotlin.version>
+        <kotlin.version>1.2.10</kotlin.version>
         <kotlin.logging.version>1.4.6</kotlin.logging.version>
         <jackson.module.kotlin.version>2.9.0</jackson.module.kotlin.version>
 
